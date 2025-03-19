@@ -1,8 +1,8 @@
 # 🖥️ Virtual-TI: Your Web-Based TI Graphing Calculator Emulator 🚀
 
-![screenshot 1](https://github.com/the-real-kodoninja/Virtual-TI/captureit_3-19-2025_at_18-14-10.png)
+![screenshot 1](https://github.com/the-real-kodoninja/Virtual-TI/blob/main/captureit_3-19-2025_at_18-14-10.png)
 
-![screenshot 2](https://github.com/the-real-kodoninja/Virtual-TI/captureit_3-19-2025_at_18-18-02.png)
+![screenshot 2](https://github.com/the-real-kodoninja/Virtual-TI/blob/main/captureit_3-19-2025_at_18-18-02.png)
 
 ## 🌟 Overview
 
