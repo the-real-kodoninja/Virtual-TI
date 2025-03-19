@@ -26,7 +26,7 @@
 
 ## 🚀 Installation Instructions
 
-1. **Clone the Repository (if applicable):**
+1. **Clone the Repository:**
 
     ```bash
     git clone <repository-url>
@@ -83,7 +83,6 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 * Thank you to the creators and maintainers of Python, Flask, NumPy, Matplotlib, HTML, CSS, SASS, and Dart.
 * Built with passion by Emmanuel Barry Moore.
-
 
 #### Changes to `README.md`
 - **New Features**: Added sections for the sticky widget, touch support, persistent state, and introductory guide.
