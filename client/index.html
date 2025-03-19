@@ -7,37 +7,148 @@
     <title>Virtual-TI: TI Calculator Emulator</title>
 </head>
 <body>
-    <div class="calculator">
-        <div class="display" id="display" contenteditable="true" oninput="updateDisplay()"></div>
-        <form id="calc-form" method="POST" action="/calculate" onsubmit="return calculate();">
-            <input type="text" name="expression" placeholder="Enter expression" required style="display:none;">
-            <div style="display: flex; flex-wrap: wrap; justify-content: center;">
-                <button type="button" onclick="appendToDisplay('1')">1</button>
-                <button type="button" onclick="appendToDisplay('2')">2</button>
-                <button type="button" onclick="appendToDisplay('3')">3</button>
-                <button type="button" onclick="appendToDisplay('+')">+</button>
-                <button type="button" onclick="appendToDisplay('4')">4</button>
-                <button type="button" onclick="appendToDisplay('5')">5</button>
-                <button type="button" onclick="appendToDisplay('6')">6</button>
-                <button type="button" onclick="appendToDisplay('-')">-</button>
-                <button type="button" onclick="appendToDisplay('7')">7</button>
-                <button type="button" onclick="appendToDisplay('8')">8</button>
-                <button type="button" onclick="appendToDisplay('9')">9</button>
-                <button type="button" onclick="appendToDisplay('*')">*</button>
-                <button type="button" onclick="appendToDisplay('0')">0</button>
-                <button type="button" onclick="appendToDisplay('/')">/</button>
-                <button type="button" onclick="appendToDisplay('(')">(</button>
-                <button type="button" onclick="appendToDisplay(')')">)</button>
-                <button type="submit">Calculate</button>
-                <button type="button" onclick="clearDisplay()">C</button>
+    <!-- Introductory Section -->
+    <div class="intro" id="intro">
+        <h1>🖥️ Welcome to Virtual-TI 🚀</h1>
+        <p>
+            Virtual-TI is a web-based TI graphing calculator emulator that brings the power of a TI calculator to your browser! 🌐
+            Perform basic arithmetic, plot complex mathematical functions, and enjoy an interactive interface that mimics the classic TI calculator.
+        </p>
+        <h3>✨ How It Works</h3>
+        <ul>
+            <li>Click the calculator icon below to open the emulator.</li>
+            <li>Use the keypad to input expressions (e.g., "1+1" or "sin(0.5)").</li>
+            <li>Press "Enter" to calculate, or "Plot" to graph functions like "sin(x)".</li>
+            <li>Drag the calculator to move it, and click the close button to minimize it.</li>
+        </ul>
+        <p>Built with passion by Emmanuel Barry Moore.</p>
+    </div>
+
+    <!-- Sticky Calculator Widget -->
+    <div class="calculator-widget" id="calculator-widget">
+        <div class="calculator-minimized" id="calculator-minimized">
+            <button class="toggle-button" onclick="toggleCalculator()">🖩</button>
+        </div>
+        <div class="calculator" id="calculator">
+            <div class="screen">
+                <div class="display" id="display"></div>
+                <div id="result"></div>
+                <div id="plot"></div>
             </div>
-        </form>
-        <form id="plot-form" method="POST" action="/plot" onsubmit="return plot();">
-            <input type="text" name="expression" placeholder="Enter expression for plot" required style="display:none;">
-            <button type="submit">Plot</button>
-        </form>
-        <div id="result"></div>
-        <div id="plot"></div>
+            <button class="close-button" onclick="toggleCalculator()">✖</button>
+            <div class="keypad">
+                <!-- Navigation Pad -->
+                <div class="navigation-pad">
+                    <button type="button" class="nav-button empty"></button>
+                    <button type="button" class="nav-button" onclick="navigate('up')">▲</button>
+                    <button type="button" class="nav-button empty"></button>
+                    <button type="button" class="nav-button" onclick="navigate('left')">◄</button>
+                    <button type="button" class="nav-button" onclick="navigate('enter')">Enter</button>
+                    <button type="button" class="nav-button" onclick="navigate('right')">►</button>
+                    <button type="button" class="nav-button empty"></button>
+                    <button type="button" class="nav-button" onclick="navigate('down')">▼</button>
+                    <button type="button" class="nav-button empty"></button>
+                </div>
+                <!-- Function Keys -->
+                <div class="function-keys">
+                    <button type="button" onclick="performFunction('doc')">Doc</button>
+                    <button type="button" onclick="performFunction('menu')">Menu</button>
+                    <button type="button" onclick="performFunction('on')">On</button>
+                    <button type="button" onclick="performFunction('esc')">Esc</button>
+                </div>
+                <!-- Alphanumeric Keys -->
+                <div class="alphanumeric-keypad">
+                    <button type="button" onclick="appendToDisplay('A')">A</button>
+                    <button type="button" onclick="appendToDisplay('B')">B</button>
+                    <button type="button" onclick="appendToDisplay('C')">C</button>
+                    <button type="button" onclick="showVars()">Vars</button>
+                </div>
+                <!-- Numeric Keypad -->
+                <div class="numeric-keypad">
+                    <button type="button" onclick="appendToDisplay('7')">7</button>
+                    <button type="button" onclick="appendToDisplay('8')">8</button>
+                    <button type="button" onclick="appendToDisplay('9')">9</button>
+                    <button type="button" onclick="appendToDisplay('+')">+</button>
+                    <button type="button" onclick="appendToDisplay('4')">4</button>
+                    <button type="button" onclick="appendToDisplay('5')">5</button>
+                    <button type="button" onclick="appendToDisplay('6')">6</button>
+                    <button type="button" onclick="appendToDisplay('×')">×</button>
+                    <button type="button" onclick="appendToDisplay('1')">1</button>
+                    <button type="button" onclick="appendToDisplay('2')">2</button>
+                    <button type="button" onclick="appendToDisplay('3')">3</button>
+                    <button type="button" onclick="appendToDisplay('-')">−</button>
+                    <button type="button" onclick="appendToDisplay('0')">0</button>
+                    <button type="button" onclick="appendToDisplay('.')">.</button>
+                    <button type="button" id="clear" onclick="clearDisplay()">C</button>
+                    <button type="button" onclick="appendToDisplay('+')">+</button>
+                </div>
+                <!-- Math Function Keys -->
+                <div class="math-function-keys">
+                    <button type="button" onclick="appendToDisplay('sin(')">sin</button>
+                    <button type="button" onclick="appendToDisplay('cos(')">cos</button>
+                    <button type="button" onclick="appendToDisplay('tan(')">tan</button>
+                    <button type="button" onclick="showHistory()">Hist</button>
+                </div>
+                <!-- Plot Button -->
+                <div class="plot-button">
+                    <button type="button" onclick="showPlotModal()">Plot</button>
+                </div>
+            </div>
+            <form id="calc-form" method="POST" action="/calculate" onsubmit="return calculate();">
+                <input type="text" name="expression" id="calc-expression" style="display:none;">
+            </form>
+            <form id="plot-form" method="POST" action="/plot" onsubmit="return plot();">
+                <input type="text" name="expression" id="plot-expression" style="display:none;">
+            </form>
+        </div>
+    </div>
+
+    <!-- Plot Options Modal -->
+    <div class="modal" id="plot-modal">
+        <div class="modal-content">
+            <h2>Plot Options</h2>
+            <label>Expression 1:</label>
+            <input type="text" id="plot-expr1" placeholder="e.g., sin(x)" value="sin(x)">
+            <label>Expression 2 (optional):</label>
+            <input type="text" id="plot-expr2" placeholder="e.g., cos(x)">
+            <label>X Min:</label>
+            <input type="number" id="x-min" value="-10">
+            <label>X Max:</label>
+            <input type="number" id="x-max" value="10">
+            <label>Step:</label>
+            <input type="number" id="step" value="0.025" step="0.001">
+            <label>Line Color 1:</label>
+            <input type="color" id="color1" value="#ff0000">
+            <label>Line Color 2 (if applicable):</label>
+            <input type="color" id="color2" value="#0000ff">
+            <label>Line Style:</label>
+            <select id="line-style">
+                <option value="-">Solid</option>
+                <option value="--">Dashed</option>
+                <option value=":">Dotted</option>
+                <option value="-.">Dash-Dot</option>
+            </select>
+            <button onclick="submitPlot()">Plot</button>
+            <button onclick="closePlotModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal" id="history-modal">
+        <div class="modal-content">
+            <h2>Calculation History</h2>
+            <ul id="history-list"></ul>
+            <button onclick="closeHistoryModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Variables Modal -->
+    <div class="modal" id="vars-modal">
+        <div class="modal-content">
+            <h2>Stored Variables</h2>
+            <ul id="vars-list"></ul>
+            <button onclick="closeVarsModal()">Close</button>
+        </div>
     </div>
 
     <script defer src="js/main.dart.js"></script>

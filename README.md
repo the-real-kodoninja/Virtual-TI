@@ -10,6 +10,10 @@
 * **📈 Dynamic Graphing:** Plot mathematical functions using an intuitive input format and watch your equations come to life visually.
 * **🖱️ Interactive Interface:** Enjoy a seamless web-based experience with real-time expression input and result display.
 * **🎨 Customizable Graphs:** Adjust graph parameters and visual styles.
+* **📍 Sticky Widget:** A draggable calculator widget that can be minimized into a small circle at the bottom of your screen, making it accessible on any page.
+* **📱 Touch Support:** Use the calculator on mobile devices with touch-based dragging and interaction.
+* **💾 Persistent State:** The calculator’s position and state (minimized or expanded) are saved across page reloads using `localStorage`.
+* **📖 Introductory Guide:** A welcome screen explains how to use the calculator before you start, which hides when the calculator is expanded.
 
 ## 🛠️ Technologies Used
 
@@ -79,3 +83,19 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 * Thank you to the creators and maintainers of Python, Flask, NumPy, Matplotlib, HTML, CSS, SASS, and Dart.
 * Built with passion by Emmanuel Barry Moore.
+
+
+#### Changes to `README.md`
+- **New Features**: Added sections for the sticky widget, touch support, persistent state, and introductory guide.
+- **Usage Section**: Added a detailed usage guide explaining how to interact with the calculator, including the new features.
+- **Security Note**: Added a warning about the use of `eval` in `app.py` and suggested using `sympy` as a safer alternative.
+
+---
+
+### Reviewing and Securing `app.py`
+
+Your `app.py` uses `eval` to evaluate expressions, which is a significant security risk because it can execute arbitrary Python code. For example, a malicious user could send an expression like `__import__('os').system('rm -rf /')`, which could delete files on your server. Let’s replace `eval` with a safer alternative using `sympy` for symbolic mathematics.
+
+#### Updated `server/app.py`
+
+First, ensure `sympy` is installed by adding it to your `server/requirements.txt`:
