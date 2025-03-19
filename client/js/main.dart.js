@@ -496,6 +496,9 @@
     _clearChildren$0$x(receiver) {
       return J.getInterceptor$x(receiver)._clearChildren$0(receiver);
     },
+    allMatches$1$s(receiver, a0) {
+      return J.getInterceptor$s(receiver).allMatches$1(receiver, a0);
+    },
     elementAt$1$ax(receiver, a0) {
       return J.getInterceptor$ax(receiver).elementAt$1(receiver, a0);
     },
@@ -601,6 +604,10 @@
       this._iterator = t0;
       this._f = t1;
       this.$ti = t2;
+    },
+    ReversedListIterable: function ReversedListIterable(t0, t1) {
+      this._source = t0;
+      this.$ti = t1;
     },
     unminifyOrTag(rawClassName) {
       var preserved = init.mangledGlobalNames[rawClassName];
@@ -1355,6 +1362,23 @@
         return $function.apply(null, fieldRtis);
       return $function(fieldRtis);
     },
+    JSSyntaxRegExp_makeNative(source, multiLine, caseSensitive, unicode, dotAll, global) {
+      var m = multiLine ? "m" : "",
+        i = caseSensitive ? "" : "i",
+        u = unicode ? "u" : "",
+        s = dotAll ? "s" : "",
+        g = global ? "g" : "",
+        regexp = function(source, modifiers) {
+          try {
+            return new RegExp(source, modifiers);
+          } catch (e) {
+            return e;
+          }
+        }(source, m + i + u + s + g);
+      if (regexp instanceof RegExp)
+        return regexp;
+      throw A.wrapException(A.FormatException$("Illegal RegExp pattern (" + String(regexp) + ")", source));
+    },
     stringContainsUnchecked(receiver, other, startIndex) {
       var t1 = receiver.indexOf(other, startIndex);
       return t1 >= 0;
@@ -1484,6 +1508,43 @@
     },
     initHooks_closure1: function initHooks_closure1(t0) {
       this.prototypeForTag = t0;
+    },
+    JSSyntaxRegExp: function JSSyntaxRegExp(t0, t1) {
+      var _ = this;
+      _.pattern = t0;
+      _._nativeRegExp = t1;
+      _._nativeAnchoredRegExp = _._nativeGlobalRegExp = null;
+    },
+    _MatchImplementation: function _MatchImplementation(t0) {
+      this._match = t0;
+    },
+    _AllMatchesIterable: function _AllMatchesIterable(t0, t1, t2) {
+      this._re = t0;
+      this._string = t1;
+      this._start = t2;
+    },
+    _AllMatchesIterator: function _AllMatchesIterator(t0, t1, t2) {
+      var _ = this;
+      _._regExp = t0;
+      _._string = t1;
+      _._nextIndex = t2;
+      _.__js_helper$_current = null;
+    },
+    StringMatch: function StringMatch(t0, t1) {
+      this.start = t0;
+      this.pattern = t1;
+    },
+    _StringAllMatchesIterable: function _StringAllMatchesIterable(t0, t1, t2) {
+      this._input = t0;
+      this._pattern = t1;
+      this.__js_helper$_index = t2;
+    },
+    _StringAllMatchesIterator: function _StringAllMatchesIterator(t0, t1, t2) {
+      var _ = this;
+      _._input = t0;
+      _._pattern = t1;
+      _.__js_helper$_index = t2;
+      _.__js_helper$_current = null;
     },
     Rti__getQuestionFromStar(universe, rti) {
       var question = rti._precomputed1;
@@ -3610,6 +3671,9 @@
           result[i] = fill;
       return result;
     },
+    RegExp_RegExp(source) {
+      return new A.JSSyntaxRegExp(source, A.JSSyntaxRegExp_makeNative(source, false, true, false, false, false));
+    },
     StringBuffer__writeAll(string, objects, separator) {
       var iterator = J.get$iterator$ax(objects);
       if (!iterator.moveNext$0())
@@ -3804,6 +3868,9 @@
       B.JSArray_methods.add$1(parts, penultimateString);
       B.JSArray_methods.add$1(parts, ultimateString);
     },
+    print(object) {
+      A.printString(object);
+    },
     Error: function Error() {
     },
     AssertionError: function AssertionError(t0) {
@@ -3970,24 +4037,6 @@
       t1._SimpleNodeValidator$4$allowedAttributes$allowedElements$allowedUriAttributes(null, new A.MappedListIterable(B.List_pgZ, t4, type$.MappedListIterable_String_String), t3, null);
       return t1;
     },
-    _convertNativeToDart_EventTarget(e) {
-      var $window,
-        t1 = "postMessage" in e;
-      t1.toString;
-      if (t1) {
-        $window = A._DOMWindowCrossFrame__createSafe(e);
-        return $window;
-      } else
-        return type$.nullable_EventTarget._as(e);
-    },
-    _DOMWindowCrossFrame__createSafe(w) {
-      var t1 = window;
-      t1.toString;
-      if (w === t1)
-        return type$.WindowBase._as(w);
-      else
-        return new A._DOMWindowCrossFrame();
-    },
     _wrapZone(callback, $T) {
       var t1 = $.Zone__current;
       if (t1 === B.C__RootZone)
@@ -4053,6 +4102,8 @@
     },
     KeyboardEvent: function KeyboardEvent() {
     },
+    LIElement: function LIElement() {
+    },
     Location: function Location() {
     },
     MouseEvent: function MouseEvent() {
@@ -4088,6 +4139,8 @@
     TouchList: function TouchList() {
     },
     UIEvent: function UIEvent() {
+    },
+    UListElement: function UListElement() {
     },
     Window: function Window() {
     },
@@ -4171,8 +4224,6 @@
       _._html$_current = null;
       _.$ti = t2;
     },
-    _DOMWindowCrossFrame: function _DOMWindowCrossFrame() {
-    },
     _SameOriginUriPolicy: function _SameOriginUriPolicy(t0, t1) {
       this._hiddenAnchor = t0;
       this._loc = t1;
@@ -4210,7 +4261,6 @@
         t2 = type$.DivElement,
         calculator = t2._as(t1.querySelector("#calculator")),
         minimized = t2._as(t1.querySelector("#calculator-minimized")),
-        intro = t2._as(t1.querySelector("#intro")),
         widget = t2._as(t1.querySelector("#calculator-widget"));
       if (window.localStorage.getItem("calculatorState") === "expanded") {
         list = calculator.classList;
@@ -4218,59 +4268,188 @@
         list.add("active");
         t2 = minimized.style;
         t2.display = "none";
-        list = intro.classList;
-        list.contains("hidden").toString;
-        list.add("hidden");
       } else {
         list = calculator.classList;
         list.contains("active").toString;
         list.remove("active");
         t2 = minimized.style;
         t2.display = "flex";
-        list = intro.classList;
-        list.contains("hidden").toString;
-        list.remove("hidden");
       }
       savedTop = window.localStorage.getItem("calculatorTop");
+      if (savedTop == null)
+        savedTop = "20px";
       savedLeft = window.localStorage.getItem("calculatorLeft");
-      t2 = savedTop == null;
-      if (!t2 && savedLeft != null) {
-        t3 = widget.style;
-        t3.toString;
-        t3.top = t2 ? "" : savedTop;
-        t3 = widget.style;
-        t3.left = savedLeft;
-        t2 = widget.style;
-        t2.bottom = "auto";
-        t2 = widget.style;
-        t2.right = "auto";
+      if (savedLeft == null)
+        savedLeft = "auto";
+      t2 = widget.style;
+      t2.top = savedTop;
+      t2 = widget.style;
+      t2.left = savedLeft;
+      t2 = widget.style;
+      t2.bottom = "auto";
+      t2 = widget.style;
+      t2.right = "20px";
+      t2 = t1.querySelector(".toggle-button");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector(".close-button");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure0()), false, t3._precomputed1);
       }
       t2 = t1.querySelector("#calc-form");
       if (t2 != null) {
         t2 = J.get$onSubmit$x(t2);
         t3 = t2.$ti;
-        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure()), false, t3._precomputed1);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure1()), false, t3._precomputed1);
       }
       t2 = t1.querySelector("#plot-form");
       if (t2 != null) {
         t2 = J.get$onSubmit$x(t2);
         t3 = t2.$ti;
-        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure0()), false, t3._precomputed1);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure2()), false, t3._precomputed1);
       }
       t2 = type$.Element;
       A.checkTypeBound(t2, t2, "T", "querySelectorAll");
       t2 = t1.querySelectorAll(".keypad button");
       t2.toString;
       t2 = new A._FrozenElementList(t2, type$._FrozenElementList_Element);
-      t2.forEach$1(t2, new A.main_closure1());
+      t2.forEach$1(t2, new A.main_closure3());
+      t2 = t1.querySelector("#nav-up");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure4()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#nav-down");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure5()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#nav-left");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure6()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#nav-right");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure7()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#nav-enter");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure8()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#func-doc");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure9()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#func-menu");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure10()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#func-on");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure11()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#func-esc");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure12()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#func-sin");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure13()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#func-cos");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure14()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#func-tan");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure15()), false, t3._precomputed1);
+      }
       t2 = t1.querySelector("#clear");
       if (t2 != null) {
         t2 = J.get$onClick$x(t2);
         t3 = t2.$ti;
-        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure2()), false, t3._precomputed1);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure16()), false, t3._precomputed1);
       }
-      A._EventStreamSubscription$(t1, "keydown", type$.nullable_void_Function_KeyboardEvent._as(new A.main_closure3()), false, type$.KeyboardEvent);
+      t2 = t1.querySelector("#show-plot-modal");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure17()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#submit-plot");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure18()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#close-plot-modal");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure19()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#show-history");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure20()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#close-history-modal");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure21()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#show-vars");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure22()), false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#close-vars-modal");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        A._EventStreamSubscription$(t2._target, t2._eventType, t3._eval$1("~(1)?")._as(new A.main_closure23()), false, t3._precomputed1);
+      }
+      A._EventStreamSubscription$(t1, "keydown", type$.nullable_void_Function_KeyboardEvent._as(new A.main_closure24()), false, type$.KeyboardEvent);
       A.makeDraggable();
+    },
+    appendToDisplay(value) {
+      var t1,
+        display = type$.DivElement._as(document.querySelector("#display")),
+        currentText = display.textContent;
+      B.DivElement_methods.set$text(display, (currentText == null ? "" : currentText) + value);
+      t1 = display.scrollWidth;
+      t1.toString;
+      display.scrollLeft = B.JSInt_methods.round$0(B.JSNumber_methods.round$0(t1));
     },
     navigate(direction) {
       var t1, t2, t3,
@@ -4324,10 +4503,44 @@
           break;
       }
     },
+    performFunction(func) {
+      var t1, t2,
+        _s7_ = "#result",
+        _s8_ = "#display";
+      switch (func) {
+        case "doc":
+          t1 = document.querySelector(_s7_);
+          if (t1 != null)
+            J.set$text$x(t1, "Documentation not implemented");
+          break;
+        case "menu":
+          t1 = document.querySelector(_s7_);
+          if (t1 != null)
+            J.set$text$x(t1, "Menu not implemented");
+          break;
+        case "on":
+          t1 = document;
+          B.DivElement_methods.set$text(type$.DivElement._as(t1.querySelector(_s8_)), "");
+          t2 = t1.querySelector(_s7_);
+          if (t2 != null)
+            J.set$text$x(t2, "");
+          t1 = t1.querySelector("#plot");
+          if (t1 != null)
+            J.set$innerHtml$x(t1, "");
+          B.JSArray_methods.clear$0($.calculationHistory);
+          $.historyIndex = -1;
+          $.variables.clear$0(0);
+          break;
+        case "esc":
+          B.DivElement_methods.set$text(type$.DivElement._as(document.querySelector(_s8_)), "");
+          break;
+      }
+    },
     calculate() {
-      var t2, t3, evalExpression, entry, t4, t5, onError,
+      var t3, t4, evalExpression, entry, t5, t6, explanationDiv, explanation, parts,
         t1 = document,
-        display = type$.DivElement._as(t1.querySelector("#display")),
+        t2 = type$.DivElement,
+        display = t2._as(t1.querySelector("#display")),
         expression = display.textContent;
       if (expression == null)
         expression = "";
@@ -4335,40 +4548,195 @@
         return;
       B.JSArray_methods.add$1($.calculationHistory, expression);
       $.historyIndex = -1;
-      for (t2 = $.variables, t2 = new A.LinkedHashMapEntriesIterable(t2, t2.$ti._eval$1("LinkedHashMapEntriesIterable<1,2>")).get$iterator(0), t3 = type$.Pattern, evalExpression = expression; t2.moveNext$0();) {
-        entry = t2.__js_helper$_current;
-        t4 = entry.key;
-        t5 = J.toString$0$(entry.value);
-        t3._as(t4);
-        evalExpression = A.stringReplaceAllUnchecked(evalExpression, t4, t5);
+      for (t3 = $.variables, t3 = new A.LinkedHashMapEntriesIterable(t3, t3.$ti._eval$1("LinkedHashMapEntriesIterable<1,2>")).get$iterator(0), t4 = type$.Pattern, evalExpression = expression; t3.moveNext$0();) {
+        entry = t3.__js_helper$_current;
+        t5 = entry.key;
+        t6 = J.toString$0$(entry.value);
+        t4._as(t5);
+        evalExpression = A.stringReplaceAllUnchecked(evalExpression, t5, t6);
       }
+      explanationDiv = t2._as(t1.querySelector("#explanation"));
+      explanation = 'Explanation of "' + expression + '":\n';
+      if (B.JSString_methods.contains$1(expression, "+")) {
+        parts = expression.split("+");
+        t2 = parts.length;
+        if (0 >= t2)
+          return A.ioore(parts, 0);
+        t3 = B.JSString_methods.trim$0(parts[0]);
+        if (1 >= t2)
+          return A.ioore(parts, 1);
+        explanation += "This expression adds two numbers: " + t3 + " and " + B.JSString_methods.trim$0(parts[1]) + ". Addition combines the values to produce a sum.";
+      } else if (B.JSString_methods.contains$1(expression, "\u2212") || B.JSString_methods.contains$1(expression, "-")) {
+        parts = B.JSString_methods.split$1(expression, A.RegExp_RegExp("\u2212|-"));
+        if (1 >= parts.length)
+          return A.ioore(parts, 1);
+        explanation += "This expression subtracts " + B.JSString_methods.trim$0(parts[1]) + " from " + B.JSString_methods.trim$0(parts[0]) + ". Subtraction finds the difference between the two numbers.";
+      } else if (B.JSString_methods.contains$1(expression, "\xd7")) {
+        parts = expression.split("\xd7");
+        t2 = parts.length;
+        if (0 >= t2)
+          return A.ioore(parts, 0);
+        t3 = B.JSString_methods.trim$0(parts[0]);
+        if (1 >= t2)
+          return A.ioore(parts, 1);
+        explanation += "This expression multiplies " + t3 + " by " + B.JSString_methods.trim$0(parts[1]) + ". Multiplication finds the product of the two numbers.";
+      } else if (B.JSString_methods.contains$1(expression, "sin("))
+        explanation += "This expression calculates the sine of " + B.JSString_methods.substring$2(expression, B.JSString_methods.indexOf$1(expression, "(") + 1, B.JSString_methods.lastIndexOf$1(expression, ")")) + " radians. The sine function returns the ratio of the opposite side to the hypotenuse in a right triangle, often used in trigonometry to model periodic phenomena.";
+      else if (B.JSString_methods.contains$1(expression, "cos("))
+        explanation += "This expression calculates the cosine of " + B.JSString_methods.substring$2(expression, B.JSString_methods.indexOf$1(expression, "(") + 1, B.JSString_methods.lastIndexOf$1(expression, ")")) + " radians. The cosine function returns the ratio of the adjacent side to the hypotenuse in a right triangle, commonly used in wave analysis and geometry.";
+      else if (B.JSString_methods.contains$1(expression, "tan("))
+        explanation += "This expression calculates the tangent of " + B.JSString_methods.substring$2(expression, B.JSString_methods.indexOf$1(expression, "(") + 1, B.JSString_methods.lastIndexOf$1(expression, ")")) + " radians. The tangent function is the ratio of sine to cosine, often used in trigonometry to find angles and slopes.";
+      else if (B.JSString_methods.contains$1(expression, "=")) {
+        parts = expression.split("=");
+        if (1 >= parts.length)
+          return A.ioore(parts, 1);
+        explanation += "This expression assigns the value " + B.JSString_methods.trim$0(parts[1]) + " to the variable " + B.JSString_methods.trim$0(parts[0]) + ". Variable assignment stores a value for later use in calculations.";
+      } else
+        explanation += 'This expression appears to be a single value or an unrecognized operation. Please enter a mathematical expression like "2+3" or "sin(0.5)" to get a detailed explanation.';
+      B.DivElement_methods.set$text(explanationDiv, explanation);
+      t2 = explanationDiv.scrollHeight;
+      t2.toString;
+      explanationDiv.scrollTop = B.JSInt_methods.round$0(B.JSNumber_methods.round$0(t2));
       B.InputElement_methods.set$value(type$.InputElement._as(t1.querySelector("#calc-expression")), evalExpression);
       t1 = type$.String;
-      t1 = A.HttpRequest_request("/calculate", "POST", A.LinkedHashMap_LinkedHashMap$_literal(["Content-Type", "application/json"], t1, t1), B.C_JsonCodec.encode$2$toEncodable(A.LinkedHashMap_LinkedHashMap$_literal(["expression", evalExpression], t1, t1), null)).then$1$1(new A.calculate_closure(display, expression), type$.Null);
-      onError = new A.calculate_closure0();
-      t2 = t1.$ti;
-      t3 = $.Zone__current;
-      if (t3 !== B.C__RootZone)
-        onError = A._registerErrorHandler(onError, t3);
-      t1._addListener$1(new A._FutureListener(new A._Future(t3, t2), 2, null, onError, t2._eval$1("_FutureListener<1,1>")));
+      A.HttpRequest_request("/calculate", "POST", A.LinkedHashMap_LinkedHashMap$_literal(["Content-Type", "application/json"], t1, t1), B.C_JsonCodec.encode$2$toEncodable(A.LinkedHashMap_LinkedHashMap$_literal(["expression", evalExpression], t1, t1), null)).then$1$1(new A.calculate_closure(display, expression), type$.Null).catchError$1(new A.calculate_closure0());
     },
-    plot() {
-      var t1,
-        expression = type$.DivElement._as(document.querySelector("#display")).textContent;
-      if (expression == null)
-        expression = "";
+    closePlotModal() {
+      var list = type$.DivElement._as(document.querySelector("#plot-modal")).classList;
+      list.contains("active").toString;
+      list.remove("active");
+    },
+    submitPlot() {
+      var expr2, t3, xMin, xMax, step, color1, color2, lineStyle, evalExpr2, evalExpr1, entry, t4, t5, t6,
+        t1 = document,
+        t2 = type$.InputElement,
+        expr1 = t2._as(t1.querySelector("#plot-expr1")).value;
+      if (expr1 == null)
+        expr1 = "";
+      expr2 = t2._as(t1.querySelector("#plot-expr2")).value;
+      if (expr2 == null)
+        expr2 = "";
+      t3 = t2._as(t1.querySelector("#x-min")).value;
+      xMin = A.Primitives_parseDouble(t3 == null ? "-10" : t3);
+      if (xMin == null)
+        xMin = -10;
+      t3 = t2._as(t1.querySelector("#x-max")).value;
+      xMax = A.Primitives_parseDouble(t3 == null ? "10" : t3);
+      if (xMax == null)
+        xMax = 10;
+      t3 = t2._as(t1.querySelector("#step")).value;
+      step = A.Primitives_parseDouble(t3 == null ? "0.025" : t3);
+      if (step == null)
+        step = 0.025;
+      color1 = t2._as(t1.querySelector("#color1")).value;
+      if (color1 == null)
+        color1 = "#ff0000";
+      color2 = t2._as(t1.querySelector("#color2")).value;
+      if (color2 == null)
+        color2 = "#0000ff";
+      lineStyle = type$.SelectElement._as(t1.querySelector("#line-style")).value;
+      if (lineStyle == null)
+        lineStyle = "-";
+      if (expr1.length === 0) {
+        t1 = t1.querySelector("#plot");
+        if (t1 != null)
+          J.set$text$x(t1, "Error: At least one expression is required");
+        A.closePlotModal();
+        return;
+      }
+      evalExpr2 = expr2.length !== 0 ? expr2 : null;
+      for (t1 = $.variables, t1 = new A.LinkedHashMapEntriesIterable(t1, t1.$ti._eval$1("LinkedHashMapEntriesIterable<1,2>")).get$iterator(0), t2 = type$.Pattern, evalExpr1 = expr1; t1.moveNext$0();) {
+        entry = t1.__js_helper$_current;
+        t3 = entry.key;
+        t4 = entry.value;
+        t5 = J.getInterceptor$(t4);
+        t6 = t5.toString$0(t4);
+        t2._as(t3);
+        evalExpr1 = A.stringReplaceAllUnchecked(evalExpr1, t3, t6);
+        if (evalExpr2 != null) {
+          t4 = t5.toString$0(t4);
+          evalExpr2 = A.stringReplaceAllUnchecked(evalExpr2, t3, t4);
+        }
+      }
       t1 = type$.String;
-      A.HttpRequest_request("/plot", "POST", A.LinkedHashMap_LinkedHashMap$_literal(["Content-Type", "application/json"], t1, t1), B.C_JsonCodec.encode$2$toEncodable(A.LinkedHashMap_LinkedHashMap$_literal(["expression", expression], t1, t1), null)).then$1$1(new A.plot_closure(), type$.Null);
+      A.HttpRequest_request("/plot", "POST", A.LinkedHashMap_LinkedHashMap$_literal(["Content-Type", "application/json"], t1, t1), B.C_JsonCodec.encode$2$toEncodable(A.LinkedHashMap_LinkedHashMap$_literal(["expression1", evalExpr1, "expression2", evalExpr2, "x_min", xMin, "x_max", xMax, "step", step, "color1", color1, "color2", color2, "line_style", lineStyle], t1, type$.nullable_Object), null)).then$1$1(new A.submitPlot_closure(), type$.Null).catchError$1(new A.submitPlot_closure0());
+    },
+    showHistory() {
+      var t2, t3, t4, t5, list,
+        t1 = document,
+        modal = type$.DivElement._as(t1.querySelector("#history-modal")),
+        historyList = type$.UListElement._as(t1.querySelector("#history-list"));
+      B.UListElement_methods.setInnerHtml$1(historyList, "");
+      for (t2 = $.calculationHistory, t3 = A._arrayInstanceType(t2)._eval$1("ReversedListIterable<1>"), t2 = new A.ReversedListIterable(t2, t3), t2 = new A.ListIterator(t2, t2.get$length(0), t3._eval$1("ListIterator<ListIterable.E>")), t3 = t3._eval$1("ListIterable.E"); t2.moveNext$0();) {
+        t4 = t2.__internal$_current;
+        if (t4 == null)
+          t4 = t3._as(t4);
+        t5 = t1.createElement("li");
+        t5.toString;
+        B.LIElement_methods.set$text(t5, t4);
+        historyList.appendChild(t5).toString;
+      }
+      list = modal.classList;
+      list.contains("active").toString;
+      list.add("active");
+    },
+    showVars() {
+      var t2, t3, t4, list,
+        t1 = document,
+        modal = type$.DivElement._as(t1.querySelector("#vars-modal")),
+        varsList = type$.UListElement._as(t1.querySelector("#vars-list"));
+      B.UListElement_methods.setInnerHtml$1(varsList, "");
+      for (t2 = $.variables, t2 = new A.LinkedHashMapEntriesIterable(t2, t2.$ti._eval$1("LinkedHashMapEntriesIterable<1,2>")).get$iterator(0); t2.moveNext$0();) {
+        t3 = t2.__js_helper$_current;
+        t3.toString;
+        t4 = t1.createElement("li");
+        t4.toString;
+        B.LIElement_methods.set$text(t4, A.S(t3.key) + " = " + A.S(t3.value));
+        varsList.appendChild(t4).toString;
+      }
+      list = modal.classList;
+      list.contains("active").toString;
+      list.add("active");
+    },
+    toggleCalculator() {
+      var list,
+        _s15_ = "calculatorState",
+        t1 = document,
+        t2 = type$.DivElement,
+        calculator = t2._as(t1.querySelector("#calculator")),
+        minimized = t2._as(t1.querySelector("#calculator-minimized"));
+      t1 = calculator.classList.contains("active");
+      t1.toString;
+      if (t1) {
+        list = calculator.classList;
+        list.contains("active").toString;
+        list.remove("active");
+        t1 = minimized.style;
+        t1.display = "flex";
+        window.localStorage.setItem(_s15_, "minimized");
+      } else {
+        list = calculator.classList;
+        list.contains("active").toString;
+        list.add("active");
+        t1 = minimized.style;
+        t1.display = "none";
+        window.localStorage.setItem(_s15_, "expanded");
+      }
     },
     makeDraggable() {
-      var t2, t1 = {},
-        widget = type$.DivElement._as(document.querySelector("#calculator-widget"));
+      var t3, t4, t1 = {},
+        t2 = document,
+        widget = type$.DivElement._as(t2.querySelector("#calculator-widget"));
       t1.pos4 = t1.pos3 = t1.pos2 = t1.pos1 = 0;
       t1.isDragging = false;
-      t2 = type$._ElementEventStreamImpl_MouseEvent;
-      A._EventStreamSubscription$(widget, "mousedown", t2._eval$1("~(1)?")._as(new A.makeDraggable_closure(t1, widget)), false, t2._precomputed1);
-      t2 = type$._ElementEventStreamImpl_TouchEvent;
-      A._EventStreamSubscription$(widget, "touchstart", t2._eval$1("~(1)?")._as(new A.makeDraggable_closure0(t1, widget)), false, t2._precomputed1);
+      t3 = type$._ElementEventStreamImpl_MouseEvent;
+      A._EventStreamSubscription$(widget, "mousedown", t3._eval$1("~(1)?")._as(new A.makeDraggable_closure(t1, widget)), false, t3._precomputed1);
+      t3 = type$._ElementEventStreamImpl_TouchEvent;
+      A._EventStreamSubscription$(widget, "touchstart", t3._eval$1("~(1)?")._as(new A.makeDraggable_closure0(t1)), false, t3._precomputed1);
+      t3 = type$.nullable_void_Function_TouchEvent;
+      t4 = type$.TouchEvent;
+      A._EventStreamSubscription$(t2, "touchmove", t3._as(new A.makeDraggable_closure1(t1, widget)), false, t4);
+      A._EventStreamSubscription$(t2, "touchend", t3._as(new A.makeDraggable_closure2(t1)), false, t4);
     },
     main_closure: function main_closure() {
     },
@@ -4376,11 +4744,54 @@
     },
     main_closure1: function main_closure1() {
     },
-    main__closure: function main__closure() {
-    },
     main_closure2: function main_closure2() {
     },
     main_closure3: function main_closure3() {
+    },
+    main__closure: function main__closure(t0) {
+      this.button = t0;
+    },
+    main_closure4: function main_closure4() {
+    },
+    main_closure5: function main_closure5() {
+    },
+    main_closure6: function main_closure6() {
+    },
+    main_closure7: function main_closure7() {
+    },
+    main_closure8: function main_closure8() {
+    },
+    main_closure9: function main_closure9() {
+    },
+    main_closure10: function main_closure10() {
+    },
+    main_closure11: function main_closure11() {
+    },
+    main_closure12: function main_closure12() {
+    },
+    main_closure13: function main_closure13() {
+    },
+    main_closure14: function main_closure14() {
+    },
+    main_closure15: function main_closure15() {
+    },
+    main_closure16: function main_closure16() {
+    },
+    main_closure17: function main_closure17() {
+    },
+    main_closure18: function main_closure18() {
+    },
+    main_closure19: function main_closure19() {
+    },
+    main_closure20: function main_closure20() {
+    },
+    main_closure21: function main_closure21() {
+    },
+    main_closure22: function main_closure22() {
+    },
+    main_closure23: function main_closure23() {
+    },
+    main_closure24: function main_closure24() {
     },
     calculate_closure: function calculate_closure(t0, t1) {
       this.display = t0;
@@ -4388,20 +4799,11 @@
     },
     calculate_closure0: function calculate_closure0() {
     },
-    plot_closure: function plot_closure() {
+    submitPlot_closure: function submitPlot_closure() {
+    },
+    submitPlot_closure0: function submitPlot_closure0() {
     },
     makeDraggable_closure: function makeDraggable_closure(t0, t1) {
-      this._box_0 = t0;
-      this.widget = t1;
-    },
-    makeDraggable__closure1: function makeDraggable__closure1(t0, t1) {
-      this._box_0 = t0;
-      this.widget = t1;
-    },
-    makeDraggable__closure2: function makeDraggable__closure2(t0) {
-      this._box_0 = t0;
-    },
-    makeDraggable_closure0: function makeDraggable_closure0(t0, t1) {
       this._box_0 = t0;
       this.widget = t1;
     },
@@ -4411,6 +4813,31 @@
     },
     makeDraggable__closure0: function makeDraggable__closure0(t0) {
       this._box_0 = t0;
+    },
+    makeDraggable_closure0: function makeDraggable_closure0(t0) {
+      this._box_0 = t0;
+    },
+    makeDraggable_closure1: function makeDraggable_closure1(t0, t1) {
+      this._box_0 = t0;
+      this.widget = t1;
+    },
+    makeDraggable_closure2: function makeDraggable_closure2(t0) {
+      this._box_0 = t0;
+    },
+    printString(string) {
+      if (typeof dartPrint == "function") {
+        dartPrint(string);
+        return;
+      }
+      if (typeof console == "object" && typeof console.log != "undefined") {
+        console.log(string);
+        return;
+      }
+      if (typeof print == "function") {
+        print(string);
+        return;
+      }
+      throw "Unable to print message: " + String(string);
     },
     throwLateFieldADI(fieldName) {
       A.throwExpressionWithWrapper(new A.LateError("Field '" + fieldName + "' has been assigned during initialization."), new Error());
@@ -4502,8 +4929,12 @@
       receiver.$flags & 1 && A.throwUnsupportedOperation(receiver, 29);
       receiver.push(value);
     },
+    clear$0(receiver) {
+      receiver.$flags & 1 && A.throwUnsupportedOperation(receiver, "clear", "clear");
+      receiver.length = 0;
+    },
     elementAt$1(receiver, index) {
-      if (!(index < receiver.length))
+      if (!(index >= 0 && index < receiver.length))
         return A.ioore(receiver, index);
       return receiver[index];
     },
@@ -4649,6 +5080,43 @@
     $isTrustedGetRuntimeType: 1
   };
   J.JSString.prototype = {
+    allMatches$1(receiver, string) {
+      return new A._StringAllMatchesIterable(string, receiver, 0);
+    },
+    split$1(receiver, pattern) {
+      var nativeAnchoredRegExp, t1;
+      if (typeof pattern == "string")
+        return A._setArrayType(receiver.split(pattern), type$.JSArray_String);
+      else {
+        if (pattern instanceof A.JSSyntaxRegExp) {
+          nativeAnchoredRegExp = pattern.get$_nativeAnchoredVersion();
+          nativeAnchoredRegExp.lastIndex = 0;
+          t1 = nativeAnchoredRegExp.exec("").length - 2 === 0;
+        } else
+          t1 = false;
+        if (t1)
+          return A._setArrayType(receiver.split(pattern._nativeRegExp), type$.JSArray_String);
+        else
+          return this._defaultSplit$1(receiver, pattern);
+      }
+    },
+    _defaultSplit$1(receiver, pattern) {
+      var t1, start, $length, match, matchStart, matchEnd,
+        result = A._setArrayType([], type$.JSArray_String);
+      for (t1 = J.allMatches$1$s(pattern, receiver), t1 = t1.get$iterator(t1), start = 0, $length = 1; t1.moveNext$0();) {
+        match = t1.get$current();
+        matchStart = match.get$start(match);
+        matchEnd = match.get$end();
+        $length = matchEnd - matchStart;
+        if ($length === 0 && start === matchStart)
+          continue;
+        B.JSArray_methods.add$1(result, this.substring$2(receiver, start, matchStart));
+        start = matchEnd;
+      }
+      if (start < receiver.length || $length > 0)
+        B.JSArray_methods.add$1(result, this.substring$1(receiver, start));
+      return result;
+    },
     startsWith$1(receiver, pattern) {
       var otherLength = pattern.length;
       if (otherLength > receiver.length)
@@ -4657,6 +5125,9 @@
     },
     substring$2(receiver, start, end) {
       return receiver.substring(start, A.RangeError_checkValidRange(start, end, receiver.length));
+    },
+    substring$1(receiver, start) {
+      return this.substring$2(receiver, start, null);
     },
     toLowerCase$0(receiver) {
       return receiver.toLowerCase();
@@ -4682,6 +5153,17 @@
       if (startIndex === 0 && endIndex0 === endIndex)
         return result;
       return result.substring(startIndex, endIndex0);
+    },
+    indexOf$1(receiver, pattern) {
+      var t1 = receiver.indexOf(pattern, 0);
+      return t1;
+    },
+    lastIndexOf$1(receiver, pattern) {
+      var start = receiver.length,
+        t1 = pattern.length;
+      if (start + t1 > start)
+        start -= t1;
+      return receiver.lastIndexOf(pattern, start);
     },
     contains$2(receiver, other, startIndex) {
       var t1 = receiver.length;
@@ -4791,6 +5273,16 @@
       return this._iterator.get$current();
     },
     $isIterator: 1
+  };
+  A.ReversedListIterable.prototype = {
+    get$length(_) {
+      return J.get$length$asx(this._source);
+    },
+    elementAt$1(_, index) {
+      var t1 = this._source,
+        t2 = J.getInterceptor$asx(t1);
+      return t2.elementAt$1(t1, t2.get$length(t1) - 1 - index);
+    }
   };
   A.TypeErrorDecoder.prototype = {
     matchTypeError$1(message) {
@@ -4983,6 +5475,14 @@
         }
       }
     },
+    clear$0(_) {
+      var _this = this;
+      if (_this.__js_helper$_length > 0) {
+        _this._strings = _this._nums = _this.__js_helper$_rest = _this._first = _this._last = null;
+        _this.__js_helper$_length = 0;
+        _this._modified$0();
+      }
+    },
     forEach$1(_, action) {
       var cell, modifications, _this = this;
       _this.$ti._eval$1("~(1,2)")._as(action);
@@ -5136,6 +5636,156 @@
     },
     $signature: 15
   };
+  A.JSSyntaxRegExp.prototype = {
+    toString$0(_) {
+      return "RegExp/" + this.pattern + "/" + this._nativeRegExp.flags;
+    },
+    get$_nativeGlobalVersion() {
+      var _this = this,
+        t1 = _this._nativeGlobalRegExp;
+      if (t1 != null)
+        return t1;
+      t1 = _this._nativeRegExp;
+      return _this._nativeGlobalRegExp = A.JSSyntaxRegExp_makeNative(_this.pattern, t1.multiline, !t1.ignoreCase, t1.unicode, t1.dotAll, true);
+    },
+    get$_nativeAnchoredVersion() {
+      var _this = this,
+        t1 = _this._nativeAnchoredRegExp;
+      if (t1 != null)
+        return t1;
+      t1 = _this._nativeRegExp;
+      return _this._nativeAnchoredRegExp = A.JSSyntaxRegExp_makeNative(_this.pattern + "|()", t1.multiline, !t1.ignoreCase, t1.unicode, t1.dotAll, true);
+    },
+    allMatches$1(_, string) {
+      return new A._AllMatchesIterable(this, string, 0);
+    },
+    _execGlobal$2(string, start) {
+      var match,
+        regexp = this.get$_nativeGlobalVersion();
+      if (regexp == null)
+        regexp = type$.Object._as(regexp);
+      regexp.lastIndex = start;
+      match = regexp.exec(string);
+      if (match == null)
+        return null;
+      return new A._MatchImplementation(match);
+    },
+    $isPattern: 1,
+    $isRegExp: 1
+  };
+  A._MatchImplementation.prototype = {
+    get$start(_) {
+      return this._match.index;
+    },
+    get$end() {
+      var t1 = this._match;
+      return t1.index + t1[0].length;
+    },
+    $index(_, index) {
+      return B.JSArray_methods.$index(this._match, A._asInt(index));
+    },
+    $isMatch: 1,
+    $isRegExpMatch: 1
+  };
+  A._AllMatchesIterable.prototype = {
+    get$iterator(_) {
+      return new A._AllMatchesIterator(this._re, this._string, this._start);
+    }
+  };
+  A._AllMatchesIterator.prototype = {
+    get$current() {
+      var t1 = this.__js_helper$_current;
+      return t1 == null ? type$.RegExpMatch._as(t1) : t1;
+    },
+    moveNext$0() {
+      var t1, t2, t3, match, nextIndex, t4, _this = this,
+        string = _this._string;
+      if (string == null)
+        return false;
+      t1 = _this._nextIndex;
+      t2 = string.length;
+      if (t1 <= t2) {
+        t3 = _this._regExp;
+        match = t3._execGlobal$2(string, t1);
+        if (match != null) {
+          _this.__js_helper$_current = match;
+          nextIndex = match.get$end();
+          if (match._match.index === nextIndex) {
+            t1 = false;
+            if (t3._nativeRegExp.unicode) {
+              t3 = _this._nextIndex;
+              t4 = t3 + 1;
+              if (t4 < t2) {
+                if (!(t3 >= 0 && t3 < t2))
+                  return A.ioore(string, t3);
+                t3 = string.charCodeAt(t3);
+                if (t3 >= 55296 && t3 <= 56319) {
+                  if (!(t4 >= 0))
+                    return A.ioore(string, t4);
+                  t1 = string.charCodeAt(t4);
+                  t1 = t1 >= 56320 && t1 <= 57343;
+                }
+              }
+            }
+            nextIndex = (t1 ? nextIndex + 1 : nextIndex) + 1;
+          }
+          _this._nextIndex = nextIndex;
+          return true;
+        }
+      }
+      _this._string = _this.__js_helper$_current = null;
+      return false;
+    },
+    $isIterator: 1
+  };
+  A.StringMatch.prototype = {
+    get$end() {
+      return this.start + this.pattern.length;
+    },
+    $index(_, g) {
+      A.throwExpression(A.RangeError$value(A._asInt(g), null));
+      return this.pattern;
+    },
+    $isMatch: 1,
+    get$start(receiver) {
+      return this.start;
+    }
+  };
+  A._StringAllMatchesIterable.prototype = {
+    get$iterator(_) {
+      return new A._StringAllMatchesIterator(this._input, this._pattern, this.__js_helper$_index);
+    }
+  };
+  A._StringAllMatchesIterator.prototype = {
+    moveNext$0() {
+      var index, end, _this = this,
+        t1 = _this.__js_helper$_index,
+        t2 = _this._pattern,
+        t3 = t2.length,
+        t4 = _this._input,
+        t5 = t4.length;
+      if (t1 + t3 > t5) {
+        _this.__js_helper$_current = null;
+        return false;
+      }
+      index = t4.indexOf(t2, t1);
+      if (index < 0) {
+        _this.__js_helper$_index = t5 + 1;
+        _this.__js_helper$_current = null;
+        return false;
+      }
+      end = index + t3;
+      _this.__js_helper$_current = new A.StringMatch(index, t2);
+      _this.__js_helper$_index = end === _this.__js_helper$_index ? end + 1 : end;
+      return true;
+    },
+    get$current() {
+      var t1 = this.__js_helper$_current;
+      t1.toString;
+      return t1;
+    },
+    $isIterator: 1
+  };
   A.Rti.prototype = {
     _eval$1(recipe) {
       return A._Universe_evalInEnvironment(init.typeUniverse, this, recipe);
@@ -5199,7 +5849,7 @@
     call$0() {
       this.callback.call$0();
     },
-    $signature: 0
+    $signature: 1
   };
   A.AsyncError.prototype = {
     toString$0(_) {
@@ -5276,6 +5926,15 @@
     },
     then$1$1(f, $R) {
       return this.then$1$2$onError(f, null, $R);
+    },
+    catchError$1(onError) {
+      var t1 = this.$ti,
+        t2 = $.Zone__current,
+        result = new A._Future(t2, t1);
+      if (t2 !== B.C__RootZone)
+        onError = A._registerErrorHandler(onError, t2);
+      this._addListener$1(new A._FutureListener(result, 2, null, onError, t1._eval$1("_FutureListener<1,1>")));
+      return result;
     },
     _setErrorObject$1(error) {
       this._state = this._state & 1 | 16;
@@ -5392,31 +6051,31 @@
     call$0() {
       A._Future__propagateToListeners(this.$this, this.listener);
     },
-    $signature: 0
+    $signature: 1
   };
   A._Future__prependListeners_closure.prototype = {
     call$0() {
       A._Future__propagateToListeners(this.$this, this._box_0.listeners);
     },
-    $signature: 0
+    $signature: 1
   };
   A._Future__chainCoreFuture_closure.prototype = {
     call$0() {
       A._Future__chainCoreFuture(this._box_0.source, this.target, true);
     },
-    $signature: 0
+    $signature: 1
   };
   A._Future__asyncCompleteWithValue_closure.prototype = {
     call$0() {
       this.$this._completeWithValue$1(this.value);
     },
-    $signature: 0
+    $signature: 1
   };
   A._Future__asyncCompleteError_closure.prototype = {
     call$0() {
       this.$this._completeError$2(this.error, this.stackTrace);
     },
-    $signature: 0
+    $signature: 1
   };
   A._Future__propagateToListeners_handleWhenCompleteCallback.prototype = {
     call$0() {
@@ -5459,7 +6118,7 @@
         t1.listenerHasError = false;
       }
     },
-    $signature: 0
+    $signature: 1
   };
   A._Future__propagateToListeners_handleWhenCompleteCallback_closure.prototype = {
     call$1(__wc0_formal) {
@@ -5495,7 +6154,7 @@
         t3.listenerHasError = true;
       }
     },
-    $signature: 0
+    $signature: 1
   };
   A._Future__propagateToListeners_handleError.prototype = {
     call$0() {
@@ -5527,7 +6186,7 @@
         t1.listenerHasError = true;
       }
     },
-    $signature: 0
+    $signature: 1
   };
   A._AsyncCallbackEntry.prototype = {};
   A.Stream.prototype = {
@@ -5562,14 +6221,14 @@
       t1._resultOrListeners = t3;
       A._Future__propagateToListeners(t1, listeners);
     },
-    $signature: 0
+    $signature: 1
   };
   A._Zone.prototype = {$isZone: 1};
   A._rootHandleError_closure.prototype = {
     call$0() {
       A.Error_throwWithStackTrace(this.error, this.stackTrace);
     },
-    $signature: 0
+    $signature: 1
   };
   A._RootZone.prototype = {
     runGuarded$1(f) {
@@ -5638,7 +6297,7 @@
     call$0() {
       return this.$this.runGuarded$1(this.f);
     },
-    $signature: 0
+    $signature: 1
   };
   A._RootZone_bindUnaryCallbackGuarded_closure.prototype = {
     call$1(arg) {
@@ -6665,6 +7324,7 @@
     $isInputElement: 1
   };
   A.KeyboardEvent.prototype = {$isKeyboardEvent: 1};
+  A.LIElement.prototype = {};
   A.Location.prototype = {
     toString$0(receiver) {
       var t1 = String(receiver);
@@ -6754,7 +7414,7 @@
       return t1;
     },
     elementAt$1(receiver, index) {
-      if (!(index < receiver.length))
+      if (!(index >= 0 && index < receiver.length))
         return A.ioore(receiver, index);
       return receiver[index];
     },
@@ -6766,7 +7426,8 @@
   A.SelectElement.prototype = {
     get$length(receiver) {
       return receiver.length;
-    }
+    },
+    $isSelectElement: 1
   };
   A.Storage.prototype = {
     $index(receiver, key) {
@@ -6884,7 +7545,7 @@
       return t1;
     },
     elementAt$1(receiver, index) {
-      if (!(index < receiver.length))
+      if (!(index >= 0 && index < receiver.length))
         return A.ioore(receiver, index);
       return receiver[index];
     },
@@ -6893,7 +7554,37 @@
     $isList: 1
   };
   A.UIEvent.prototype = {};
-  A.Window.prototype = {$isWindowBase: 1};
+  A.UListElement.prototype = {$isUListElement: 1};
+  A.Window.prototype = {
+    get$scrollX(receiver) {
+      var t1 = "scrollX" in receiver;
+      t1.toString;
+      if (t1) {
+        t1 = receiver.scrollX;
+        t1.toString;
+        t1 = B.JSNumber_methods.round$0(t1);
+      } else {
+        t1 = receiver.document.documentElement.scrollLeft;
+        t1.toString;
+        t1 = B.JSNumber_methods.round$0(t1);
+      }
+      return t1;
+    },
+    get$scrollY(receiver) {
+      var t1 = "scrollY" in receiver;
+      t1.toString;
+      if (t1) {
+        t1 = receiver.scrollY;
+        t1.toString;
+        t1 = B.JSNumber_methods.round$0(t1);
+      } else {
+        t1 = receiver.document.documentElement.scrollTop;
+        t1.toString;
+        t1 = B.JSNumber_methods.round$0(t1);
+      }
+      return t1;
+    }
+  };
   A._Attr.prototype = {$is_Attr: 1};
   A._NamedNodeMap.prototype = {
     get$length(receiver) {
@@ -6914,7 +7605,7 @@
       return t1;
     },
     elementAt$1(receiver, index) {
-      if (!(index < receiver.length))
+      if (!(index >= 0 && index < receiver.length))
         return A.ioore(receiver, index);
       return receiver[index];
     },
@@ -7132,7 +7823,6 @@
     },
     $isIterator: 1
   };
-  A._DOMWindowCrossFrame.prototype = {$isEventTarget: 1, $isWindowBase: 1};
   A._SameOriginUriPolicy.prototype = {$isUriPolicy: 1};
   A._ValidatingTreeSanitizer.prototype = {
     sanitizeTree$1(node) {
@@ -7376,51 +8066,211 @@
   };
   A.main_closure.prototype = {
     call$1($event) {
+      type$.MouseEvent._as($event);
+      A.toggleCalculator();
+    },
+    $signature: 0
+  };
+  A.main_closure0.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      A.toggleCalculator();
+    },
+    $signature: 0
+  };
+  A.main_closure1.prototype = {
+    call$1($event) {
       $event.preventDefault();
       A.calculate();
     },
     $signature: 3
   };
-  A.main_closure0.prototype = {
+  A.main_closure2.prototype = {
     call$1($event) {
       $event.preventDefault();
-      A.plot();
+      A.submitPlot();
     },
     $signature: 3
   };
-  A.main_closure1.prototype = {
+  A.main_closure3.prototype = {
     call$1(button) {
-      var t1 = J.get$onClick$x(type$.Element._as(button)),
-        t2 = t1.$ti;
-      A._EventStreamSubscription$(t1._target, t1._eventType, t2._eval$1("~(1)?")._as(new A.main__closure()), false, t2._precomputed1);
+      var t1, t2;
+      type$.Element._as(button);
+      t1 = button.id;
+      t1.toString;
+      if (t1 === "nav-up" || t1 === "nav-down" || t1 === "nav-left" || t1 === "nav-right" || t1 === "nav-enter" || t1 === "func-doc" || t1 === "func-menu" || t1 === "func-on" || t1 === "func-esc" || t1 === "show-vars" || t1 === "clear" || t1 === "func-sin" || t1 === "func-cos" || t1 === "func-tan" || t1 === "show-history" || t1 === "show-plot-modal")
+        return;
+      t1 = J.get$onClick$x(button);
+      t2 = t1.$ti;
+      A._EventStreamSubscription$(t1._target, t1._eventType, t2._eval$1("~(1)?")._as(new A.main__closure(button)), false, t2._precomputed1);
     },
     $signature: 23
   };
   A.main__closure.prototype = {
     call$1($event) {
-      var display, currentText, t1,
-        value = type$.ButtonElement._as(A._convertNativeToDart_EventTarget(type$.MouseEvent._as($event).target)).textContent;
-      if (value == null)
-        value = "";
-      if (value !== "Enter" && value !== "Doc" && value !== "Menu" && value !== "On" && value !== "Esc" && value !== "Plot" && value !== "Hist" && value !== "Vars") {
-        display = type$.DivElement._as(document.querySelector("#display"));
-        currentText = display.textContent;
-        B.DivElement_methods.set$text(display, (currentText == null ? "" : currentText) + value);
-        t1 = display.scrollWidth;
-        t1.toString;
-        display.scrollLeft = B.JSInt_methods.round$0(B.JSNumber_methods.round$0(t1));
-      }
+      var value;
+      type$.MouseEvent._as($event);
+      value = type$.ButtonElement._as(this.button).textContent;
+      A.appendToDisplay(value == null ? "" : value);
     },
-    $signature: 1
+    $signature: 0
   };
-  A.main_closure2.prototype = {
+  A.main_closure4.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      return A.navigate("up");
+    },
+    $signature: 0
+  };
+  A.main_closure5.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      return A.navigate("down");
+    },
+    $signature: 0
+  };
+  A.main_closure6.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      return A.navigate("left");
+    },
+    $signature: 0
+  };
+  A.main_closure7.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      return A.navigate("right");
+    },
+    $signature: 0
+  };
+  A.main_closure8.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      return A.navigate("enter");
+    },
+    $signature: 0
+  };
+  A.main_closure9.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      return A.performFunction("doc");
+    },
+    $signature: 0
+  };
+  A.main_closure10.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      return A.performFunction("menu");
+    },
+    $signature: 0
+  };
+  A.main_closure11.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      return A.performFunction("on");
+    },
+    $signature: 0
+  };
+  A.main_closure12.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      return A.performFunction("esc");
+    },
+    $signature: 0
+  };
+  A.main_closure13.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      return A.appendToDisplay("sin(");
+    },
+    $signature: 0
+  };
+  A.main_closure14.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      return A.appendToDisplay("cos(");
+    },
+    $signature: 0
+  };
+  A.main_closure15.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      return A.appendToDisplay("tan(");
+    },
+    $signature: 0
+  };
+  A.main_closure16.prototype = {
     call$1($event) {
       type$.MouseEvent._as($event);
       B.DivElement_methods.set$text(type$.DivElement._as(document.querySelector("#display")), "");
     },
-    $signature: 1
+    $signature: 0
   };
-  A.main_closure3.prototype = {
+  A.main_closure17.prototype = {
+    call$1($event) {
+      var t1, t2, modal, expr1Input, list;
+      type$.MouseEvent._as($event);
+      t1 = document;
+      t2 = type$.DivElement;
+      modal = t2._as(t1.querySelector("#plot-modal"));
+      expr1Input = type$.InputElement._as(t1.querySelector("#plot-expr1"));
+      t1 = t2._as(t1.querySelector("#display")).textContent;
+      B.InputElement_methods.set$value(expr1Input, t1 == null ? "" : t1);
+      list = modal.classList;
+      list.contains("active").toString;
+      list.add("active");
+    },
+    $signature: 0
+  };
+  A.main_closure18.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      A.submitPlot();
+    },
+    $signature: 0
+  };
+  A.main_closure19.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      A.closePlotModal();
+    },
+    $signature: 0
+  };
+  A.main_closure20.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      A.showHistory();
+    },
+    $signature: 0
+  };
+  A.main_closure21.prototype = {
+    call$1($event) {
+      var list;
+      type$.MouseEvent._as($event);
+      list = type$.DivElement._as(document.querySelector("#history-modal")).classList;
+      list.contains("active").toString;
+      list.remove("active");
+    },
+    $signature: 0
+  };
+  A.main_closure22.prototype = {
+    call$1($event) {
+      type$.MouseEvent._as($event);
+      A.showVars();
+    },
+    $signature: 0
+  };
+  A.main_closure23.prototype = {
+    call$1($event) {
+      var list;
+      type$.MouseEvent._as($event);
+      list = type$.DivElement._as(document.querySelector("#vars-modal")).classList;
+      list.contains("active").toString;
+      list.remove("active");
+    },
+    $signature: 0
+  };
+  A.main_closure24.prototype = {
     call$1($event) {
       switch (type$.KeyboardEvent._as($event).key) {
         case "ArrowUp":
@@ -7479,7 +8329,7 @@
     },
     $signature: 2
   };
-  A.plot_closure.prototype = {
+  A.submitPlot_closure.prototype = {
     call$1(response) {
       var data, t2,
         _s8_ = "plot_url",
@@ -7493,11 +8343,23 @@
           J.set$innerHtml$x(t2, '<img src="' + A.S(t1.$index(data, _s8_)) + '" />');
       } else {
         t2 = document.querySelector("#plot");
-        if (t2 != null)
-          J.set$text$x(t2, A._asStringQ(t1.$index(data, "result")));
+        if (t2 != null) {
+          t1 = t1.$index(data, "result");
+          J.set$text$x(t2, "Error: " + A.S(t1 == null ? "Plotting failed" : t1));
+        }
       }
+      A.closePlotModal();
     },
     $signature: 12
+  };
+  A.submitPlot_closure0.prototype = {
+    call$1(error) {
+      var t1 = document.querySelector("#plot");
+      if (t1 != null)
+        J.set$text$x(t1, "Plotting error");
+      A.closePlotModal();
+    },
+    $signature: 2
   };
   A.makeDraggable_closure.prototype = {
     call$1($event) {
@@ -7505,25 +8367,25 @@
         t1 = type$.MouseEvent;
       t1._as($event);
       $event.preventDefault();
-      t2 = $event.clientX;
+      t2 = $event.pageX;
       t2.toString;
-      $event.clientY.toString;
+      $event.pageY.toString;
       t3 = this._box_0;
       t3.pos3 = t2;
-      $event.clientX.toString;
-      t2 = $event.clientY;
+      $event.pageX.toString;
+      t2 = $event.pageY;
       t2.toString;
       t3.pos4 = t2;
       t3.isDragging = true;
       t2 = document;
       t2.toString;
       t4 = type$.nullable_void_Function_MouseEvent;
-      A._EventStreamSubscription$(t2, "mousemove", t4._as(new A.makeDraggable__closure1(t3, this.widget)), false, t1);
-      A._EventStreamSubscription$(t2, "mouseup", t4._as(new A.makeDraggable__closure2(t3)), false, t1);
+      A._EventStreamSubscription$(t2, "mousemove", t4._as(new A.makeDraggable__closure(t3, this.widget)), false, t1);
+      A._EventStreamSubscription$(t2, "mouseup", t4._as(new A.makeDraggable__closure0(t3)), false, t1);
     },
-    $signature: 1
+    $signature: 0
   };
-  A.makeDraggable__closure1.prototype = {
+  A.makeDraggable__closure.prototype = {
     call$1($event) {
       var t1, t2, t3, pos1, pos2, t4, t5, newTop, newLeft;
       type$.MouseEvent._as($event);
@@ -7532,23 +8394,23 @@
         return;
       $event.preventDefault();
       t2 = t1.pos3;
-      t3 = $event.clientX;
+      t3 = $event.pageX;
       t3.toString;
-      $event.clientY.toString;
+      $event.pageY.toString;
       pos1 = t2 - t3;
       t1.pos1 = pos1;
       t3 = t1.pos4;
-      $event.clientX.toString;
-      t2 = $event.clientY;
+      $event.pageX.toString;
+      t2 = $event.pageY;
       t2.toString;
       pos2 = t3 - t2;
       t1.pos2 = pos2;
-      t2 = $event.clientX;
+      t2 = $event.pageX;
       t2.toString;
-      $event.clientY.toString;
+      $event.pageY.toString;
       t1.pos3 = t2;
-      $event.clientX.toString;
-      t2 = $event.clientY;
+      $event.pageX.toString;
+      t2 = $event.pageY;
       t2.toString;
       t1.pos4 = t2;
       t2 = this.widget;
@@ -7562,12 +8424,12 @@
       t4.toString;
       t5 = t2.offsetHeight;
       t5.toString;
-      newTop = Math.max(0, Math.min(t1 - pos2, t4 - B.JSNumber_methods.round$0(t5)));
+      newTop = Math.max(20, Math.min(t1 - pos2, t4 - B.JSNumber_methods.round$0(t5) - 20));
       t5 = window.innerWidth;
       t5.toString;
       t4 = t2.offsetWidth;
       t4.toString;
-      newLeft = Math.max(0, Math.min(t3 - pos1, t5 - B.JSNumber_methods.round$0(t4)));
+      newLeft = Math.max(0, Math.min(t3 - pos1, t5 - B.JSNumber_methods.round$0(t4) - 20));
       t4 = t2.style;
       t5 = A.S(newTop) + "px";
       t4.top = t5;
@@ -7581,130 +8443,164 @@
       window.localStorage.setItem("calculatorTop", t5);
       window.localStorage.setItem("calculatorLeft", t3);
     },
-    $signature: 1
+    $signature: 0
   };
-  A.makeDraggable__closure2.prototype = {
+  A.makeDraggable__closure0.prototype = {
     call$1($event) {
       type$.MouseEvent._as($event);
       this._box_0.isDragging = false;
     },
-    $signature: 1
+    $signature: 0
   };
   A.makeDraggable_closure0.prototype = {
     call$1($event) {
-      var touches, touch, t2, t3, t4,
-        t1 = type$.TouchEvent;
-      t1._as($event);
+      var touches, touch, t1, t2, t3, t4;
+      type$.TouchEvent._as($event);
       $event.preventDefault();
       touches = $event.touches;
-      if (touches == null || touches.length === 0)
+      if (touches == null || touches.length === 0) {
+        A.print("No touches detected on touchstart");
         return;
+      }
       if (0 >= touches.length)
         return A.ioore(touches, 0);
       touch = touches[0];
-      t2 = touch.clientX;
+      t1 = touch.clientX;
+      t1.toString;
+      t1 = B.JSNumber_methods.round$0(t1);
+      t2 = touch.clientY;
       t2.toString;
-      t2 = B.JSNumber_methods.round$0(t2);
-      t3 = touch.clientY;
-      t3.toString;
-      B.JSNumber_methods.round$0(t3);
+      B.JSNumber_methods.round$0(t2);
+      t2 = window;
+      t2.toString;
       t3 = this._box_0;
-      t3.pos3 = t2;
+      t3.pos3 = t1 + B.Window_methods.get$scrollX(t2);
       t2 = touch.clientX;
       t2.toString;
       B.JSNumber_methods.round$0(t2);
       t2 = touch.clientY;
       t2.toString;
-      t3.pos4 = B.JSNumber_methods.round$0(t2);
+      t2 = B.JSNumber_methods.round$0(t2);
+      t1 = window;
+      t1.toString;
+      t3.pos4 = t2 + B.Window_methods.get$scrollY(t1);
       t3.isDragging = true;
-      t2 = document;
+      t3 = touch.clientX;
+      t3.toString;
+      t3 = B.JSNumber_methods.round$0(t3);
+      t1 = touch.clientY;
+      t1.toString;
+      B.JSNumber_methods.round$0(t1);
+      t1 = touch.clientX;
+      t1.toString;
+      B.JSNumber_methods.round$0(t1);
+      t1 = touch.clientY;
+      t1.toString;
+      t1 = B.JSNumber_methods.round$0(t1);
+      t2 = window;
       t2.toString;
-      t4 = type$.nullable_void_Function_TouchEvent;
-      A._EventStreamSubscription$(t2, "touchmove", t4._as(new A.makeDraggable__closure(t3, this.widget)), false, t1);
-      A._EventStreamSubscription$(t2, "touchend", t4._as(new A.makeDraggable__closure0(t3)), false, t1);
+      t2 = B.Window_methods.get$scrollX(t2);
+      t4 = window;
+      t4.toString;
+      A.print("Touch start: clientX=" + t3 + ", clientY=" + t1 + ", scrollX=" + t2 + ", scrollY=" + B.Window_methods.get$scrollY(t4));
     },
     $signature: 4
   };
-  A.makeDraggable__closure.prototype = {
+  A.makeDraggable_closure1.prototype = {
     call$1($event) {
-      var t1, touches, touch, t2, t3, t4, pos1, pos2, t5, newTop, newLeft;
+      var t1, touches, touch, t2, t3, currentX, currentY, t4, t5, t6, t7, newTop, newLeft;
       type$.TouchEvent._as($event);
       t1 = this._box_0;
       if (!t1.isDragging)
         return;
       $event.preventDefault();
       touches = $event.touches;
-      if (touches == null || touches.length === 0)
+      if (touches == null || touches.length === 0) {
+        A.print("No touches detected on touchmove");
         return;
+      }
       if (0 >= touches.length)
         return A.ioore(touches, 0);
       touch = touches[0];
-      t2 = t1.pos3;
-      t3 = touch.clientX;
-      t3.toString;
-      t3 = B.JSNumber_methods.round$0(t3);
-      t4 = touch.clientY;
-      t4.toString;
-      B.JSNumber_methods.round$0(t4);
-      pos1 = t2 - t3;
-      t1.pos1 = pos1;
-      t3 = t1.pos4;
-      t2 = touch.clientX;
-      t2.toString;
-      B.JSNumber_methods.round$0(t2);
-      t2 = touch.clientY;
-      t2.toString;
-      pos2 = t3 - B.JSNumber_methods.round$0(t2);
-      t1.pos2 = pos2;
       t2 = touch.clientX;
       t2.toString;
       t2 = B.JSNumber_methods.round$0(t2);
       t3 = touch.clientY;
       t3.toString;
       B.JSNumber_methods.round$0(t3);
-      t1.pos3 = t2;
-      t2 = touch.clientX;
-      t2.toString;
-      B.JSNumber_methods.round$0(t2);
-      t2 = touch.clientY;
-      t2.toString;
-      t1.pos4 = B.JSNumber_methods.round$0(t2);
-      t2 = this.widget;
-      t1 = t2.offsetTop;
-      t1.toString;
-      t1 = B.JSNumber_methods.round$0(t1);
-      t3 = t2.offsetLeft;
+      t3 = window;
+      t3.toString;
+      currentX = t2 + B.Window_methods.get$scrollX(t3);
+      t3 = touch.clientX;
+      t3.toString;
+      B.JSNumber_methods.round$0(t3);
+      t3 = touch.clientY;
       t3.toString;
       t3 = B.JSNumber_methods.round$0(t3);
-      t4 = window.innerHeight;
+      t2 = window;
+      t2.toString;
+      currentY = t3 + B.Window_methods.get$scrollY(t2);
+      t1.pos1 = t1.pos3 - currentX;
+      t1.pos2 = t1.pos4 - currentY;
+      t1.pos3 = currentX;
+      t1.pos4 = currentY;
+      t2 = touch.clientX;
+      t2.toString;
+      t2 = B.JSNumber_methods.round$0(t2);
+      t3 = touch.clientY;
+      t3.toString;
+      B.JSNumber_methods.round$0(t3);
+      t3 = touch.clientX;
+      t3.toString;
+      B.JSNumber_methods.round$0(t3);
+      t3 = touch.clientY;
+      t3.toString;
+      t3 = B.JSNumber_methods.round$0(t3);
+      t4 = window;
       t4.toString;
-      t5 = t2.offsetHeight;
+      t4 = B.Window_methods.get$scrollX(t4);
+      t5 = window;
       t5.toString;
-      newTop = Math.max(0, Math.min(t1 - pos2, t4 - B.JSNumber_methods.round$0(t5)));
-      t5 = window.innerWidth;
-      t5.toString;
-      t4 = t2.offsetWidth;
+      A.print("Touch move: clientX=" + t2 + ", clientY=" + t3 + ", scrollX=" + t4 + ", scrollY=" + B.Window_methods.get$scrollY(t5));
+      t5 = this.widget;
+      t4 = t5.offsetTop;
       t4.toString;
-      newLeft = Math.max(0, Math.min(t3 - pos1, t5 - B.JSNumber_methods.round$0(t4)));
-      t4 = t2.style;
-      t5 = A.S(newTop) + "px";
-      t4.top = t5;
-      t1 = t2.style;
-      t3 = A.S(newLeft) + "px";
-      t1.left = t3;
-      t1 = t2.style;
+      t4 = B.JSNumber_methods.round$0(t4);
+      t3 = t1.pos2;
+      t2 = t5.offsetLeft;
+      t2.toString;
+      t2 = B.JSNumber_methods.round$0(t2);
+      t1 = t1.pos1;
+      t6 = window.innerHeight;
+      t6.toString;
+      t7 = t5.offsetHeight;
+      t7.toString;
+      newTop = Math.max(20, Math.min(t4 - t3, t6 - B.JSNumber_methods.round$0(t7) - 20));
+      t7 = window.innerWidth;
+      t7.toString;
+      t6 = t5.offsetWidth;
+      t6.toString;
+      newLeft = Math.max(0, Math.min(t2 - t1, t7 - B.JSNumber_methods.round$0(t6) - 20));
+      t6 = t5.style;
+      t7 = A.S(newTop) + "px";
+      t6.top = t7;
+      t1 = t5.style;
+      t2 = A.S(newLeft) + "px";
+      t1.left = t2;
+      t1 = t5.style;
       t1.bottom = "auto";
-      t1 = t2.style;
+      t1 = t5.style;
       t1.right = "auto";
-      window.localStorage.setItem("calculatorTop", t5);
-      window.localStorage.setItem("calculatorLeft", t3);
+      window.localStorage.setItem("calculatorTop", t7);
+      window.localStorage.setItem("calculatorLeft", t2);
     },
     $signature: 4
   };
-  A.makeDraggable__closure0.prototype = {
+  A.makeDraggable_closure2.prototype = {
     call$1($event) {
       type$.TouchEvent._as($event);
       this._box_0.isDragging = false;
+      A.print("Touch end");
     },
     $signature: 4
   };
@@ -7728,7 +8624,7 @@
     _static_1(A, "async__AsyncRun__scheduleImmediateJsOverride$closure", "_AsyncRun__scheduleImmediateJsOverride", 5);
     _static_1(A, "async__AsyncRun__scheduleImmediateWithSetImmediate$closure", "_AsyncRun__scheduleImmediateWithSetImmediate", 5);
     _static_1(A, "async__AsyncRun__scheduleImmediateWithTimer$closure", "_AsyncRun__scheduleImmediateWithTimer", 5);
-    _static_0(A, "async___startMicrotaskLoop$closure", "_startMicrotaskLoop", 0);
+    _static_0(A, "async___startMicrotaskLoop$closure", "_startMicrotaskLoop", 1);
     _instance(A._Completer.prototype, "get$completeError", 0, 1, null, ["call$2", "call$1"], ["completeError$2", "completeError$1"], 17, 0, 0);
     _static_1(A, "convert___defaultToEncodable$closure", "_defaultToEncodable", 6);
     _static(A, "html__Html5NodeValidator__standardAttributeValidator$closure", 4, null, ["call$4"], ["_Html5NodeValidator__standardAttributeValidator"], 13, 0);
@@ -7739,18 +8635,18 @@
       _inherit = hunkHelpers.inherit,
       _inheritMany = hunkHelpers.inheritMany;
     _inherit(A.Object, null);
-    _inheritMany(A.Object, [A.JS_CONST, J.Interceptor, J.ArrayIterator, A.Error, A.Iterable, A.ListIterator, A.WhereIterator, A.TypeErrorDecoder, A.NullThrownFromJavaScriptException, A._StackTrace, A.Closure, A.MapBase, A.LinkedHashMapCell, A.LinkedHashMapKeyIterator, A.LinkedHashMapEntryIterator, A.Rti, A._FunctionParameters, A._Type, A._TimerImpl, A.AsyncError, A._Completer, A._FutureListener, A._Future, A._AsyncCallbackEntry, A.Stream, A._Zone, A.SetBase, A._LinkedHashSetCell, A._LinkedHashSetIterator, A.ListBase, A.Codec, A.Converter, A._JsonStringifier, A.StackOverflowError, A._Exception, A.FormatException, A.MapEntry, A.Null, A._StringStackTrace, A.StringBuffer, A.CssStyleDeclarationBase, A.EventStreamProvider, A._EventStreamSubscription, A._Html5NodeValidator, A.ImmutableListMixin, A.NodeValidatorBuilder, A._SimpleNodeValidator, A._SvgNodeValidator, A.FixedSizeListIterator, A._DOMWindowCrossFrame, A._SameOriginUriPolicy, A._ValidatingTreeSanitizer]);
+    _inheritMany(A.Object, [A.JS_CONST, J.Interceptor, J.ArrayIterator, A.Error, A.Iterable, A.ListIterator, A.WhereIterator, A.TypeErrorDecoder, A.NullThrownFromJavaScriptException, A._StackTrace, A.Closure, A.MapBase, A.LinkedHashMapCell, A.LinkedHashMapKeyIterator, A.LinkedHashMapEntryIterator, A.JSSyntaxRegExp, A._MatchImplementation, A._AllMatchesIterator, A.StringMatch, A._StringAllMatchesIterator, A.Rti, A._FunctionParameters, A._Type, A._TimerImpl, A.AsyncError, A._Completer, A._FutureListener, A._Future, A._AsyncCallbackEntry, A.Stream, A._Zone, A.SetBase, A._LinkedHashSetCell, A._LinkedHashSetIterator, A.ListBase, A.Codec, A.Converter, A._JsonStringifier, A.StackOverflowError, A._Exception, A.FormatException, A.MapEntry, A.Null, A._StringStackTrace, A.StringBuffer, A.CssStyleDeclarationBase, A.EventStreamProvider, A._EventStreamSubscription, A._Html5NodeValidator, A.ImmutableListMixin, A.NodeValidatorBuilder, A._SimpleNodeValidator, A._SvgNodeValidator, A.FixedSizeListIterator, A._SameOriginUriPolicy, A._ValidatingTreeSanitizer]);
     _inheritMany(J.Interceptor, [J.JSBool, J.JSNull, J.JavaScriptObject, J.JavaScriptBigInt, J.JavaScriptSymbol, J.JSNumber, J.JSString]);
     _inheritMany(J.JavaScriptObject, [J.LegacyJavaScriptObject, J.JSArray, A.EventTarget, A._CssStyleDeclaration_JavaScriptObject_CssStyleDeclarationBase, A.DomException, A.DomImplementation, A.DomTokenList, A.Event, A.Location, A._NodeList_JavaScriptObject_ListMixin, A._Storage_JavaScriptObject_MapMixin, A.Touch, A._TouchList_JavaScriptObject_ListMixin, A.__NamedNodeMap_JavaScriptObject_ListMixin]);
     _inheritMany(J.LegacyJavaScriptObject, [J.PlainJavaScriptObject, J.UnknownJavaScriptObject, J.JavaScriptFunction]);
     _inherit(J.JSUnmodifiableArray, J.JSArray);
     _inheritMany(J.JSNumber, [J.JSInt, J.JSNumNotInt]);
     _inheritMany(A.Error, [A.LateError, A.TypeError, A.JsNoSuchMethodError, A.UnknownJsTypeError, A._CyclicInitializationError, A.RuntimeError, A.AssertionError, A._Error, A.JsonUnsupportedObjectError, A.ArgumentError, A.UnsupportedError, A.UnimplementedError, A.StateError, A.ConcurrentModificationError]);
-    _inheritMany(A.Iterable, [A.EfficientLengthIterable, A.WhereIterable]);
+    _inheritMany(A.Iterable, [A.EfficientLengthIterable, A.WhereIterable, A._AllMatchesIterable, A._StringAllMatchesIterable]);
     _inheritMany(A.EfficientLengthIterable, [A.ListIterable, A.LinkedHashMapKeysIterable, A.LinkedHashMapEntriesIterable]);
-    _inheritMany(A.ListIterable, [A.MappedListIterable, A._JsonMapKeyIterable]);
+    _inheritMany(A.ListIterable, [A.MappedListIterable, A.ReversedListIterable, A._JsonMapKeyIterable]);
     _inherit(A.NullError, A.TypeError);
-    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A.Element_Element$html_closure, A.HttpRequest_request_closure0, A._EventStreamSubscription_closure, A.NodeValidatorBuilder_allowsElement_closure, A.NodeValidatorBuilder_allowsAttribute_closure, A._SimpleNodeValidator_closure, A._SimpleNodeValidator_closure0, A._TemplatingNodeValidator_closure, A.main_closure, A.main_closure0, A.main_closure1, A.main__closure, A.main_closure2, A.main_closure3, A.calculate_closure, A.calculate_closure0, A.plot_closure, A.makeDraggable_closure, A.makeDraggable__closure1, A.makeDraggable__closure2, A.makeDraggable_closure0, A.makeDraggable__closure, A.makeDraggable__closure0]);
+    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A.Element_Element$html_closure, A.HttpRequest_request_closure0, A._EventStreamSubscription_closure, A.NodeValidatorBuilder_allowsElement_closure, A.NodeValidatorBuilder_allowsAttribute_closure, A._SimpleNodeValidator_closure, A._SimpleNodeValidator_closure0, A._TemplatingNodeValidator_closure, A.main_closure, A.main_closure0, A.main_closure1, A.main_closure2, A.main_closure3, A.main__closure, A.main_closure4, A.main_closure5, A.main_closure6, A.main_closure7, A.main_closure8, A.main_closure9, A.main_closure10, A.main_closure11, A.main_closure12, A.main_closure13, A.main_closure14, A.main_closure15, A.main_closure16, A.main_closure17, A.main_closure18, A.main_closure19, A.main_closure20, A.main_closure21, A.main_closure22, A.main_closure23, A.main_closure24, A.calculate_closure, A.calculate_closure0, A.submitPlot_closure, A.submitPlot_closure0, A.makeDraggable_closure, A.makeDraggable__closure, A.makeDraggable__closure0, A.makeDraggable_closure0, A.makeDraggable_closure1, A.makeDraggable_closure2]);
     _inheritMany(A.TearOffClosure, [A.StaticClosure, A.BoundClosure]);
     _inherit(A._AssertionError, A.AssertionError);
     _inheritMany(A.MapBase, [A.JsLinkedHashMap, A._JsonMap, A._AttributeMap]);
@@ -7769,7 +8665,7 @@
     _inheritMany(A.EventTarget, [A.Node, A.HttpRequestEventTarget, A.Window]);
     _inheritMany(A.Node, [A.Element, A.CharacterData, A.Document, A._Attr]);
     _inheritMany(A.Element, [A.HtmlElement, A.SvgElement]);
-    _inheritMany(A.HtmlElement, [A.AnchorElement, A.AreaElement, A.BaseElement, A.BodyElement, A.ButtonElement, A.DivElement, A.FormElement, A.InputElement, A.SelectElement, A.TableElement, A.TableRowElement, A.TableSectionElement, A.TemplateElement]);
+    _inheritMany(A.HtmlElement, [A.AnchorElement, A.AreaElement, A.BaseElement, A.BodyElement, A.ButtonElement, A.DivElement, A.FormElement, A.InputElement, A.LIElement, A.SelectElement, A.TableElement, A.TableRowElement, A.TableSectionElement, A.TemplateElement, A.UListElement]);
     _inherit(A.CssStyleDeclaration, A._CssStyleDeclaration_JavaScriptObject_CssStyleDeclarationBase);
     _inheritMany(A.ListBase, [A._FrozenElementList, A._ChildNodeListLazy]);
     _inherit(A.HtmlDocument, A.Document);
@@ -7801,12 +8697,12 @@
     typeUniverse: {eC: new Map(), tR: {}, eT: {}, tPV: {}, sEA: []},
     mangledGlobalNames: {int: "int", double: "double", num: "num", String: "String", bool: "bool", Null: "Null", List: "List", Object: "Object", Map: "Map"},
     mangledNames: {},
-    types: ["~()", "~(MouseEvent)", "Null(@)", "~(Event)", "~(TouchEvent)", "~(~())", "@(@)", "Null()", "~(Object?,Object?)", "~(String,String)", "bool(NodeValidator)", "bool(String)", "Null(HttpRequest)", "bool(Element,String,String,_Html5NodeValidator)", "@(@,String)", "@(String)", "Null(~())", "~(Object[StackTrace?])", "Null(Object,StackTrace)", "bool(Node)", "~(ProgressEvent)", "String(String)", "~(Node,Node?)", "~(Element)", "~(KeyboardEvent)"],
+    types: ["~(MouseEvent)", "~()", "Null(@)", "~(Event)", "~(TouchEvent)", "~(~())", "@(@)", "Null()", "~(Object?,Object?)", "~(String,String)", "bool(NodeValidator)", "bool(String)", "Null(HttpRequest)", "bool(Element,String,String,_Html5NodeValidator)", "@(@,String)", "@(String)", "Null(~())", "~(Object[StackTrace?])", "Null(Object,StackTrace)", "bool(Node)", "~(ProgressEvent)", "String(String)", "~(Node,Node?)", "~(Element)", "~(KeyboardEvent)"],
     interceptorsByTag: null,
     leafTags: null,
     arrayRti: Symbol("$ti")
   };
-  A._Universe_addRules(init.typeUniverse, JSON.parse('{"PlainJavaScriptObject":"LegacyJavaScriptObject","UnknownJavaScriptObject":"LegacyJavaScriptObject","JavaScriptFunction":"LegacyJavaScriptObject","AbortPaymentEvent":"Event","ExtendableEvent":"Event","AElement":"SvgElement","GraphicsElement":"SvgElement","_ResourceProgressEvent":"ProgressEvent","AudioElement":"HtmlElement","MediaElement":"HtmlElement","ShadowRoot":"Node","DocumentFragment":"Node","XmlDocument":"Document","PointerEvent":"MouseEvent","CompositionEvent":"UIEvent","CDataSection":"CharacterData","Text":"CharacterData","MathMLElement":"Element","JSBool":{"bool":[],"TrustedGetRuntimeType":[]},"JSNull":{"Null":[],"TrustedGetRuntimeType":[]},"JSArray":{"List":["1"],"Iterable":["1"]},"JSUnmodifiableArray":{"JSArray":["1"],"List":["1"],"Iterable":["1"]},"ArrayIterator":{"Iterator":["1"]},"JSNumber":{"double":[],"num":[]},"JSInt":{"double":[],"int":[],"num":[],"TrustedGetRuntimeType":[]},"JSNumNotInt":{"double":[],"num":[],"TrustedGetRuntimeType":[]},"JSString":{"String":[],"Pattern":[],"TrustedGetRuntimeType":[]},"LateError":{"Error":[]},"EfficientLengthIterable":{"Iterable":["1"]},"ListIterable":{"Iterable":["1"]},"ListIterator":{"Iterator":["1"]},"MappedListIterable":{"ListIterable":["2"],"Iterable":["2"],"ListIterable.E":"2","Iterable.E":"2"},"WhereIterable":{"Iterable":["1"],"Iterable.E":"1"},"WhereIterator":{"Iterator":["1"]},"NullError":{"TypeError":[],"Error":[]},"JsNoSuchMethodError":{"Error":[]},"UnknownJsTypeError":{"Error":[]},"_StackTrace":{"StackTrace":[]},"Closure":{"Function":[]},"Closure0Args":{"Function":[]},"Closure2Args":{"Function":[]},"TearOffClosure":{"Function":[]},"StaticClosure":{"Function":[]},"BoundClosure":{"Function":[]},"_CyclicInitializationError":{"Error":[]},"RuntimeError":{"Error":[]},"_AssertionError":{"Error":[]},"JsLinkedHashMap":{"MapBase":["1","2"],"LinkedHashMap":["1","2"],"Map":["1","2"],"MapBase.K":"1","MapBase.V":"2"},"LinkedHashMapKeysIterable":{"Iterable":["1"],"Iterable.E":"1"},"LinkedHashMapKeyIterator":{"Iterator":["1"]},"LinkedHashMapEntriesIterable":{"Iterable":["MapEntry<1,2>"],"Iterable.E":"MapEntry<1,2>"},"LinkedHashMapEntryIterator":{"Iterator":["MapEntry<1,2>"]},"_Error":{"Error":[]},"_TypeError":{"TypeError":[],"Error":[]},"AsyncError":{"Error":[]},"_AsyncCompleter":{"_Completer":["1"]},"_Future":{"Future":["1"]},"_Zone":{"Zone":[]},"_RootZone":{"_Zone":[],"Zone":[]},"_LinkedHashSet":{"SetBase":["1"],"Set":["1"],"Iterable":["1"],"SetBase.E":"1"},"_LinkedHashSetIterator":{"Iterator":["1"]},"ListBase":{"List":["1"],"Iterable":["1"]},"MapBase":{"Map":["1","2"]},"SetBase":{"Set":["1"],"Iterable":["1"]},"_SetBase":{"SetBase":["1"],"Set":["1"],"Iterable":["1"]},"_JsonMap":{"MapBase":["String","@"],"Map":["String","@"],"MapBase.K":"String","MapBase.V":"@"},"_JsonMapKeyIterable":{"ListIterable":["String"],"Iterable":["String"],"ListIterable.E":"String","Iterable.E":"String"},"JsonUnsupportedObjectError":{"Error":[]},"JsonCyclicError":{"Error":[]},"double":{"num":[]},"int":{"num":[]},"String":{"Pattern":[]},"AssertionError":{"Error":[]},"TypeError":{"Error":[]},"ArgumentError":{"Error":[]},"RangeError":{"Error":[]},"IndexError":{"Error":[]},"UnsupportedError":{"Error":[]},"UnimplementedError":{"Error":[]},"StateError":{"Error":[]},"ConcurrentModificationError":{"Error":[]},"StackOverflowError":{"Error":[]},"_StringStackTrace":{"StackTrace":[]},"StringBuffer":{"StringSink":[]},"Element":{"Node":[],"EventTarget":[]},"HttpRequest":{"EventTarget":[]},"KeyboardEvent":{"Event":[]},"MouseEvent":{"Event":[]},"Node":{"EventTarget":[]},"ProgressEvent":{"Event":[]},"TouchEvent":{"Event":[]},"_Html5NodeValidator":{"NodeValidator":[]},"HtmlElement":{"Element":[],"Node":[],"EventTarget":[]},"AnchorElement":{"Element":[],"Node":[],"EventTarget":[]},"AreaElement":{"Element":[],"Node":[],"EventTarget":[]},"BaseElement":{"Element":[],"Node":[],"EventTarget":[]},"BodyElement":{"Element":[],"Node":[],"EventTarget":[]},"ButtonElement":{"Element":[],"Node":[],"EventTarget":[]},"CharacterData":{"Node":[],"EventTarget":[]},"DivElement":{"Element":[],"Node":[],"EventTarget":[]},"Document":{"Node":[],"EventTarget":[]},"_FrozenElementList":{"ListBase":["1"],"List":["1"],"Iterable":["1"],"ListBase.E":"1"},"FormElement":{"Element":[],"Node":[],"EventTarget":[]},"HtmlDocument":{"Node":[],"EventTarget":[]},"HttpRequestEventTarget":{"EventTarget":[]},"InputElement":{"Element":[],"Node":[],"EventTarget":[]},"_ChildNodeListLazy":{"ListBase":["Node"],"List":["Node"],"Iterable":["Node"],"ListBase.E":"Node"},"NodeList":{"ListBase":["Node"],"ImmutableListMixin":["Node"],"List":["Node"],"JavaScriptIndexingBehavior":["Node"],"Iterable":["Node"],"ListBase.E":"Node","ImmutableListMixin.E":"Node"},"SelectElement":{"Element":[],"Node":[],"EventTarget":[]},"Storage":{"MapBase":["String","String"],"Map":["String","String"],"MapBase.K":"String","MapBase.V":"String"},"TableElement":{"Element":[],"Node":[],"EventTarget":[]},"TableRowElement":{"Element":[],"Node":[],"EventTarget":[]},"TableSectionElement":{"Element":[],"Node":[],"EventTarget":[]},"TemplateElement":{"Element":[],"Node":[],"EventTarget":[]},"TouchList":{"ListBase":["Touch"],"ImmutableListMixin":["Touch"],"List":["Touch"],"JavaScriptIndexingBehavior":["Touch"],"Iterable":["Touch"],"ListBase.E":"Touch","ImmutableListMixin.E":"Touch"},"UIEvent":{"Event":[]},"Window":{"WindowBase":[],"EventTarget":[]},"_Attr":{"Node":[],"EventTarget":[]},"_NamedNodeMap":{"ListBase":["Node"],"ImmutableListMixin":["Node"],"List":["Node"],"JavaScriptIndexingBehavior":["Node"],"Iterable":["Node"],"ListBase.E":"Node","ImmutableListMixin.E":"Node"},"_AttributeMap":{"MapBase":["String","String"],"Map":["String","String"]},"_ElementAttributeMap":{"MapBase":["String","String"],"Map":["String","String"],"MapBase.K":"String","MapBase.V":"String"},"_EventStream":{"Stream":["1"]},"_ElementEventStreamImpl":{"_EventStream":["1"],"Stream":["1"]},"NodeValidatorBuilder":{"NodeValidator":[]},"_SimpleNodeValidator":{"NodeValidator":[]},"_TemplatingNodeValidator":{"NodeValidator":[]},"_SvgNodeValidator":{"NodeValidator":[]},"FixedSizeListIterator":{"Iterator":["1"]},"_DOMWindowCrossFrame":{"WindowBase":[],"EventTarget":[]},"_SameOriginUriPolicy":{"UriPolicy":[]},"_ValidatingTreeSanitizer":{"NodeTreeSanitizer":[]},"ScriptElement0":{"SvgElement":[],"Element":[],"Node":[],"EventTarget":[]},"SvgElement":{"Element":[],"Node":[],"EventTarget":[]}}'));
+  A._Universe_addRules(init.typeUniverse, JSON.parse('{"PlainJavaScriptObject":"LegacyJavaScriptObject","UnknownJavaScriptObject":"LegacyJavaScriptObject","JavaScriptFunction":"LegacyJavaScriptObject","AbortPaymentEvent":"Event","ExtendableEvent":"Event","AElement":"SvgElement","GraphicsElement":"SvgElement","_ResourceProgressEvent":"ProgressEvent","AudioElement":"HtmlElement","MediaElement":"HtmlElement","ShadowRoot":"Node","DocumentFragment":"Node","XmlDocument":"Document","PointerEvent":"MouseEvent","CompositionEvent":"UIEvent","CDataSection":"CharacterData","Text":"CharacterData","MathMLElement":"Element","JSBool":{"bool":[],"TrustedGetRuntimeType":[]},"JSNull":{"Null":[],"TrustedGetRuntimeType":[]},"JSArray":{"List":["1"],"Iterable":["1"]},"JSUnmodifiableArray":{"JSArray":["1"],"List":["1"],"Iterable":["1"]},"ArrayIterator":{"Iterator":["1"]},"JSNumber":{"double":[],"num":[]},"JSInt":{"double":[],"int":[],"num":[],"TrustedGetRuntimeType":[]},"JSNumNotInt":{"double":[],"num":[],"TrustedGetRuntimeType":[]},"JSString":{"String":[],"Pattern":[],"TrustedGetRuntimeType":[]},"LateError":{"Error":[]},"EfficientLengthIterable":{"Iterable":["1"]},"ListIterable":{"Iterable":["1"]},"ListIterator":{"Iterator":["1"]},"MappedListIterable":{"ListIterable":["2"],"Iterable":["2"],"ListIterable.E":"2","Iterable.E":"2"},"WhereIterable":{"Iterable":["1"],"Iterable.E":"1"},"WhereIterator":{"Iterator":["1"]},"ReversedListIterable":{"ListIterable":["1"],"Iterable":["1"],"ListIterable.E":"1","Iterable.E":"1"},"NullError":{"TypeError":[],"Error":[]},"JsNoSuchMethodError":{"Error":[]},"UnknownJsTypeError":{"Error":[]},"_StackTrace":{"StackTrace":[]},"Closure":{"Function":[]},"Closure0Args":{"Function":[]},"Closure2Args":{"Function":[]},"TearOffClosure":{"Function":[]},"StaticClosure":{"Function":[]},"BoundClosure":{"Function":[]},"_CyclicInitializationError":{"Error":[]},"RuntimeError":{"Error":[]},"_AssertionError":{"Error":[]},"JsLinkedHashMap":{"MapBase":["1","2"],"LinkedHashMap":["1","2"],"Map":["1","2"],"MapBase.K":"1","MapBase.V":"2"},"LinkedHashMapKeysIterable":{"Iterable":["1"],"Iterable.E":"1"},"LinkedHashMapKeyIterator":{"Iterator":["1"]},"LinkedHashMapEntriesIterable":{"Iterable":["MapEntry<1,2>"],"Iterable.E":"MapEntry<1,2>"},"LinkedHashMapEntryIterator":{"Iterator":["MapEntry<1,2>"]},"JSSyntaxRegExp":{"RegExp":[],"Pattern":[]},"_MatchImplementation":{"RegExpMatch":[],"Match":[]},"_AllMatchesIterable":{"Iterable":["RegExpMatch"],"Iterable.E":"RegExpMatch"},"_AllMatchesIterator":{"Iterator":["RegExpMatch"]},"StringMatch":{"Match":[]},"_StringAllMatchesIterable":{"Iterable":["Match"],"Iterable.E":"Match"},"_StringAllMatchesIterator":{"Iterator":["Match"]},"_Error":{"Error":[]},"_TypeError":{"TypeError":[],"Error":[]},"AsyncError":{"Error":[]},"_AsyncCompleter":{"_Completer":["1"]},"_Future":{"Future":["1"]},"_Zone":{"Zone":[]},"_RootZone":{"_Zone":[],"Zone":[]},"_LinkedHashSet":{"SetBase":["1"],"Set":["1"],"Iterable":["1"],"SetBase.E":"1"},"_LinkedHashSetIterator":{"Iterator":["1"]},"ListBase":{"List":["1"],"Iterable":["1"]},"MapBase":{"Map":["1","2"]},"SetBase":{"Set":["1"],"Iterable":["1"]},"_SetBase":{"SetBase":["1"],"Set":["1"],"Iterable":["1"]},"_JsonMap":{"MapBase":["String","@"],"Map":["String","@"],"MapBase.K":"String","MapBase.V":"@"},"_JsonMapKeyIterable":{"ListIterable":["String"],"Iterable":["String"],"ListIterable.E":"String","Iterable.E":"String"},"JsonUnsupportedObjectError":{"Error":[]},"JsonCyclicError":{"Error":[]},"double":{"num":[]},"int":{"num":[]},"RegExpMatch":{"Match":[]},"String":{"Pattern":[]},"AssertionError":{"Error":[]},"TypeError":{"Error":[]},"ArgumentError":{"Error":[]},"RangeError":{"Error":[]},"IndexError":{"Error":[]},"UnsupportedError":{"Error":[]},"UnimplementedError":{"Error":[]},"StateError":{"Error":[]},"ConcurrentModificationError":{"Error":[]},"StackOverflowError":{"Error":[]},"_StringStackTrace":{"StackTrace":[]},"StringBuffer":{"StringSink":[]},"Element":{"Node":[],"EventTarget":[]},"HttpRequest":{"EventTarget":[]},"KeyboardEvent":{"Event":[]},"MouseEvent":{"Event":[]},"Node":{"EventTarget":[]},"ProgressEvent":{"Event":[]},"TouchEvent":{"Event":[]},"_Html5NodeValidator":{"NodeValidator":[]},"HtmlElement":{"Element":[],"Node":[],"EventTarget":[]},"AnchorElement":{"Element":[],"Node":[],"EventTarget":[]},"AreaElement":{"Element":[],"Node":[],"EventTarget":[]},"BaseElement":{"Element":[],"Node":[],"EventTarget":[]},"BodyElement":{"Element":[],"Node":[],"EventTarget":[]},"ButtonElement":{"Element":[],"Node":[],"EventTarget":[]},"CharacterData":{"Node":[],"EventTarget":[]},"DivElement":{"Element":[],"Node":[],"EventTarget":[]},"Document":{"Node":[],"EventTarget":[]},"_FrozenElementList":{"ListBase":["1"],"List":["1"],"Iterable":["1"],"ListBase.E":"1"},"FormElement":{"Element":[],"Node":[],"EventTarget":[]},"HtmlDocument":{"Node":[],"EventTarget":[]},"HttpRequestEventTarget":{"EventTarget":[]},"InputElement":{"Element":[],"Node":[],"EventTarget":[]},"LIElement":{"Element":[],"Node":[],"EventTarget":[]},"_ChildNodeListLazy":{"ListBase":["Node"],"List":["Node"],"Iterable":["Node"],"ListBase.E":"Node"},"NodeList":{"ListBase":["Node"],"ImmutableListMixin":["Node"],"List":["Node"],"JavaScriptIndexingBehavior":["Node"],"Iterable":["Node"],"ListBase.E":"Node","ImmutableListMixin.E":"Node"},"SelectElement":{"Element":[],"Node":[],"EventTarget":[]},"Storage":{"MapBase":["String","String"],"Map":["String","String"],"MapBase.K":"String","MapBase.V":"String"},"TableElement":{"Element":[],"Node":[],"EventTarget":[]},"TableRowElement":{"Element":[],"Node":[],"EventTarget":[]},"TableSectionElement":{"Element":[],"Node":[],"EventTarget":[]},"TemplateElement":{"Element":[],"Node":[],"EventTarget":[]},"TouchList":{"ListBase":["Touch"],"ImmutableListMixin":["Touch"],"List":["Touch"],"JavaScriptIndexingBehavior":["Touch"],"Iterable":["Touch"],"ListBase.E":"Touch","ImmutableListMixin.E":"Touch"},"UIEvent":{"Event":[]},"UListElement":{"Element":[],"Node":[],"EventTarget":[]},"Window":{"EventTarget":[]},"_Attr":{"Node":[],"EventTarget":[]},"_NamedNodeMap":{"ListBase":["Node"],"ImmutableListMixin":["Node"],"List":["Node"],"JavaScriptIndexingBehavior":["Node"],"Iterable":["Node"],"ListBase.E":"Node","ImmutableListMixin.E":"Node"},"_AttributeMap":{"MapBase":["String","String"],"Map":["String","String"]},"_ElementAttributeMap":{"MapBase":["String","String"],"Map":["String","String"],"MapBase.K":"String","MapBase.V":"String"},"_EventStream":{"Stream":["1"]},"_ElementEventStreamImpl":{"_EventStream":["1"],"Stream":["1"]},"NodeValidatorBuilder":{"NodeValidator":[]},"_SimpleNodeValidator":{"NodeValidator":[]},"_TemplatingNodeValidator":{"NodeValidator":[]},"_SvgNodeValidator":{"NodeValidator":[]},"FixedSizeListIterator":{"Iterator":["1"]},"_SameOriginUriPolicy":{"UriPolicy":[]},"_ValidatingTreeSanitizer":{"NodeTreeSanitizer":[]},"ScriptElement0":{"SvgElement":[],"Element":[],"Node":[],"EventTarget":[]},"SvgElement":{"Element":[],"Node":[],"EventTarget":[]}}'));
   A._Universe_addErasedTypes(init.typeUniverse, JSON.parse('{"EfficientLengthIterable":1,"_SetBase":1,"Codec":2,"Converter":2}'));
   var string$ = {
     Error_: "Error handler must accept one Object or one Object and a StackTrace as arguments, and return a value of the returned future's type"
@@ -7847,7 +8743,9 @@
       Pattern: findType("Pattern"),
       ProgressEvent: findType("ProgressEvent"),
       Record: findType("Record"),
+      RegExpMatch: findType("RegExpMatch"),
       ScriptElement: findType("ScriptElement0"),
+      SelectElement: findType("SelectElement"),
       StackTrace: findType("StackTrace"),
       String: findType("String"),
       String_Function_String: findType("String(String)"),
@@ -7856,8 +8754,8 @@
       TouchEvent: findType("TouchEvent"),
       TrustedGetRuntimeType: findType("TrustedGetRuntimeType"),
       TypeError: findType("TypeError"),
+      UListElement: findType("UListElement"),
       UnknownJavaScriptObject: findType("UnknownJavaScriptObject"),
-      WindowBase: findType("WindowBase"),
       _AsyncCompleter_HttpRequest: findType("_AsyncCompleter<HttpRequest>"),
       _Attr: findType("_Attr"),
       _ChildNodeListLazy: findType("_ChildNodeListLazy"),
@@ -7879,7 +8777,6 @@
       int: findType("int"),
       legacy_Never: findType("0&*"),
       legacy_Object: findType("Object*"),
-      nullable_EventTarget: findType("EventTarget?"),
       nullable_Future_Null: findType("Future<Null>?"),
       nullable_List_dynamic: findType("List<@>?"),
       nullable_Object: findType("Object?"),
@@ -7914,9 +8811,12 @@
     B.JSString_methods = J.JSString.prototype;
     B.JavaScriptFunction_methods = J.JavaScriptFunction.prototype;
     B.JavaScriptObject_methods = J.JavaScriptObject.prototype;
+    B.LIElement_methods = A.LIElement.prototype;
     B.PlainJavaScriptObject_methods = J.PlainJavaScriptObject.prototype;
     B.TableElement_methods = A.TableElement.prototype;
+    B.UListElement_methods = A.UListElement.prototype;
     B.UnknownJavaScriptObject_methods = J.UnknownJavaScriptObject.prototype;
+    B.Window_methods = A.Window.prototype;
     B.C_JS_CONST = function getTagFallback(o) {
   var s = Object.prototype.toString.call(o);
   return s.substring(8, s.length - 1);
@@ -8152,8 +9052,8 @@
       }
       init.dispatchPropertyName = init.getIsolateTag("dispatch_record");
     }();
-    hunkHelpers.setOrUpdateInterceptorsByTag({DOMError: J.JavaScriptObject, MediaError: J.JavaScriptObject, Navigator: J.JavaScriptObject, NavigatorConcurrentHardware: J.JavaScriptObject, NavigatorUserMediaError: J.JavaScriptObject, OverconstrainedError: J.JavaScriptObject, PositionError: J.JavaScriptObject, GeolocationPositionError: J.JavaScriptObject, Range: J.JavaScriptObject, HTMLAudioElement: A.HtmlElement, HTMLBRElement: A.HtmlElement, HTMLCanvasElement: A.HtmlElement, HTMLContentElement: A.HtmlElement, HTMLDListElement: A.HtmlElement, HTMLDataElement: A.HtmlElement, HTMLDataListElement: A.HtmlElement, HTMLDetailsElement: A.HtmlElement, HTMLDialogElement: A.HtmlElement, HTMLEmbedElement: A.HtmlElement, HTMLFieldSetElement: A.HtmlElement, HTMLHRElement: A.HtmlElement, HTMLHeadElement: A.HtmlElement, HTMLHeadingElement: A.HtmlElement, HTMLHtmlElement: A.HtmlElement, HTMLIFrameElement: A.HtmlElement, HTMLImageElement: A.HtmlElement, HTMLLIElement: A.HtmlElement, HTMLLabelElement: A.HtmlElement, HTMLLegendElement: A.HtmlElement, HTMLLinkElement: A.HtmlElement, HTMLMapElement: A.HtmlElement, HTMLMediaElement: A.HtmlElement, HTMLMenuElement: A.HtmlElement, HTMLMetaElement: A.HtmlElement, HTMLMeterElement: A.HtmlElement, HTMLModElement: A.HtmlElement, HTMLOListElement: A.HtmlElement, HTMLObjectElement: A.HtmlElement, HTMLOptGroupElement: A.HtmlElement, HTMLOptionElement: A.HtmlElement, HTMLOutputElement: A.HtmlElement, HTMLParagraphElement: A.HtmlElement, HTMLParamElement: A.HtmlElement, HTMLPictureElement: A.HtmlElement, HTMLPreElement: A.HtmlElement, HTMLProgressElement: A.HtmlElement, HTMLQuoteElement: A.HtmlElement, HTMLScriptElement: A.HtmlElement, HTMLShadowElement: A.HtmlElement, HTMLSlotElement: A.HtmlElement, HTMLSourceElement: A.HtmlElement, HTMLSpanElement: A.HtmlElement, HTMLStyleElement: A.HtmlElement, HTMLTableCaptionElement: A.HtmlElement, HTMLTableCellElement: A.HtmlElement, HTMLTableDataCellElement: A.HtmlElement, HTMLTableHeaderCellElement: A.HtmlElement, HTMLTableColElement: A.HtmlElement, HTMLTextAreaElement: A.HtmlElement, HTMLTimeElement: A.HtmlElement, HTMLTitleElement: A.HtmlElement, HTMLTrackElement: A.HtmlElement, HTMLUListElement: A.HtmlElement, HTMLUnknownElement: A.HtmlElement, HTMLVideoElement: A.HtmlElement, HTMLDirectoryElement: A.HtmlElement, HTMLFontElement: A.HtmlElement, HTMLFrameElement: A.HtmlElement, HTMLFrameSetElement: A.HtmlElement, HTMLMarqueeElement: A.HtmlElement, HTMLElement: A.HtmlElement, HTMLAnchorElement: A.AnchorElement, HTMLAreaElement: A.AreaElement, HTMLBaseElement: A.BaseElement, HTMLBodyElement: A.BodyElement, HTMLButtonElement: A.ButtonElement, CDATASection: A.CharacterData, CharacterData: A.CharacterData, Comment: A.CharacterData, ProcessingInstruction: A.CharacterData, Text: A.CharacterData, CSSStyleDeclaration: A.CssStyleDeclaration, MSStyleCSSProperties: A.CssStyleDeclaration, CSS2Properties: A.CssStyleDeclaration, HTMLDivElement: A.DivElement, XMLDocument: A.Document, Document: A.Document, DOMException: A.DomException, DOMImplementation: A.DomImplementation, DOMTokenList: A.DomTokenList, MathMLElement: A.Element, Element: A.Element, AbortPaymentEvent: A.Event, AnimationEvent: A.Event, AnimationPlaybackEvent: A.Event, ApplicationCacheErrorEvent: A.Event, BackgroundFetchClickEvent: A.Event, BackgroundFetchEvent: A.Event, BackgroundFetchFailEvent: A.Event, BackgroundFetchedEvent: A.Event, BeforeInstallPromptEvent: A.Event, BeforeUnloadEvent: A.Event, BlobEvent: A.Event, CanMakePaymentEvent: A.Event, ClipboardEvent: A.Event, CloseEvent: A.Event, CustomEvent: A.Event, DeviceMotionEvent: A.Event, DeviceOrientationEvent: A.Event, ErrorEvent: A.Event, ExtendableEvent: A.Event, ExtendableMessageEvent: A.Event, FetchEvent: A.Event, FontFaceSetLoadEvent: A.Event, ForeignFetchEvent: A.Event, GamepadEvent: A.Event, HashChangeEvent: A.Event, InstallEvent: A.Event, MediaEncryptedEvent: A.Event, MediaKeyMessageEvent: A.Event, MediaQueryListEvent: A.Event, MediaStreamEvent: A.Event, MediaStreamTrackEvent: A.Event, MessageEvent: A.Event, MIDIConnectionEvent: A.Event, MIDIMessageEvent: A.Event, MutationEvent: A.Event, NotificationEvent: A.Event, PageTransitionEvent: A.Event, PaymentRequestEvent: A.Event, PaymentRequestUpdateEvent: A.Event, PopStateEvent: A.Event, PresentationConnectionAvailableEvent: A.Event, PresentationConnectionCloseEvent: A.Event, PromiseRejectionEvent: A.Event, PushEvent: A.Event, RTCDataChannelEvent: A.Event, RTCDTMFToneChangeEvent: A.Event, RTCPeerConnectionIceEvent: A.Event, RTCTrackEvent: A.Event, SecurityPolicyViolationEvent: A.Event, SensorErrorEvent: A.Event, SpeechRecognitionError: A.Event, SpeechRecognitionEvent: A.Event, SpeechSynthesisEvent: A.Event, StorageEvent: A.Event, SyncEvent: A.Event, TrackEvent: A.Event, TransitionEvent: A.Event, WebKitTransitionEvent: A.Event, VRDeviceEvent: A.Event, VRDisplayEvent: A.Event, VRSessionEvent: A.Event, MojoInterfaceRequestEvent: A.Event, USBConnectionEvent: A.Event, IDBVersionChangeEvent: A.Event, AudioProcessingEvent: A.Event, OfflineAudioCompletionEvent: A.Event, WebGLContextEvent: A.Event, Event: A.Event, InputEvent: A.Event, SubmitEvent: A.Event, EventTarget: A.EventTarget, HTMLFormElement: A.FormElement, HTMLDocument: A.HtmlDocument, XMLHttpRequest: A.HttpRequest, XMLHttpRequestEventTarget: A.HttpRequestEventTarget, HTMLInputElement: A.InputElement, KeyboardEvent: A.KeyboardEvent, Location: A.Location, MouseEvent: A.MouseEvent, DragEvent: A.MouseEvent, PointerEvent: A.MouseEvent, WheelEvent: A.MouseEvent, DocumentFragment: A.Node, ShadowRoot: A.Node, DocumentType: A.Node, Node: A.Node, NodeList: A.NodeList, RadioNodeList: A.NodeList, ProgressEvent: A.ProgressEvent, ResourceProgressEvent: A.ProgressEvent, HTMLSelectElement: A.SelectElement, Storage: A.Storage, HTMLTableElement: A.TableElement, HTMLTableRowElement: A.TableRowElement, HTMLTableSectionElement: A.TableSectionElement, HTMLTemplateElement: A.TemplateElement, Touch: A.Touch, TouchEvent: A.TouchEvent, TouchList: A.TouchList, CompositionEvent: A.UIEvent, FocusEvent: A.UIEvent, TextEvent: A.UIEvent, UIEvent: A.UIEvent, Window: A.Window, DOMWindow: A.Window, Attr: A._Attr, NamedNodeMap: A._NamedNodeMap, MozNamedAttrMap: A._NamedNodeMap, SVGScriptElement: A.ScriptElement0, SVGAElement: A.SvgElement, SVGAnimateElement: A.SvgElement, SVGAnimateMotionElement: A.SvgElement, SVGAnimateTransformElement: A.SvgElement, SVGAnimationElement: A.SvgElement, SVGCircleElement: A.SvgElement, SVGClipPathElement: A.SvgElement, SVGDefsElement: A.SvgElement, SVGDescElement: A.SvgElement, SVGDiscardElement: A.SvgElement, SVGEllipseElement: A.SvgElement, SVGFEBlendElement: A.SvgElement, SVGFEColorMatrixElement: A.SvgElement, SVGFEComponentTransferElement: A.SvgElement, SVGFECompositeElement: A.SvgElement, SVGFEConvolveMatrixElement: A.SvgElement, SVGFEDiffuseLightingElement: A.SvgElement, SVGFEDisplacementMapElement: A.SvgElement, SVGFEDistantLightElement: A.SvgElement, SVGFEFloodElement: A.SvgElement, SVGFEFuncAElement: A.SvgElement, SVGFEFuncBElement: A.SvgElement, SVGFEFuncGElement: A.SvgElement, SVGFEFuncRElement: A.SvgElement, SVGFEGaussianBlurElement: A.SvgElement, SVGFEImageElement: A.SvgElement, SVGFEMergeElement: A.SvgElement, SVGFEMergeNodeElement: A.SvgElement, SVGFEMorphologyElement: A.SvgElement, SVGFEOffsetElement: A.SvgElement, SVGFEPointLightElement: A.SvgElement, SVGFESpecularLightingElement: A.SvgElement, SVGFESpotLightElement: A.SvgElement, SVGFETileElement: A.SvgElement, SVGFETurbulenceElement: A.SvgElement, SVGFilterElement: A.SvgElement, SVGForeignObjectElement: A.SvgElement, SVGGElement: A.SvgElement, SVGGeometryElement: A.SvgElement, SVGGraphicsElement: A.SvgElement, SVGImageElement: A.SvgElement, SVGLineElement: A.SvgElement, SVGLinearGradientElement: A.SvgElement, SVGMarkerElement: A.SvgElement, SVGMaskElement: A.SvgElement, SVGMetadataElement: A.SvgElement, SVGPathElement: A.SvgElement, SVGPatternElement: A.SvgElement, SVGPolygonElement: A.SvgElement, SVGPolylineElement: A.SvgElement, SVGRadialGradientElement: A.SvgElement, SVGRectElement: A.SvgElement, SVGSetElement: A.SvgElement, SVGStopElement: A.SvgElement, SVGStyleElement: A.SvgElement, SVGSVGElement: A.SvgElement, SVGSwitchElement: A.SvgElement, SVGSymbolElement: A.SvgElement, SVGTSpanElement: A.SvgElement, SVGTextContentElement: A.SvgElement, SVGTextElement: A.SvgElement, SVGTextPathElement: A.SvgElement, SVGTextPositioningElement: A.SvgElement, SVGTitleElement: A.SvgElement, SVGUseElement: A.SvgElement, SVGViewElement: A.SvgElement, SVGGradientElement: A.SvgElement, SVGComponentTransferFunctionElement: A.SvgElement, SVGFEDropShadowElement: A.SvgElement, SVGMPathElement: A.SvgElement, SVGElement: A.SvgElement});
-    hunkHelpers.setOrUpdateLeafTags({DOMError: true, MediaError: true, Navigator: true, NavigatorConcurrentHardware: true, NavigatorUserMediaError: true, OverconstrainedError: true, PositionError: true, GeolocationPositionError: true, Range: true, HTMLAudioElement: true, HTMLBRElement: true, HTMLCanvasElement: true, HTMLContentElement: true, HTMLDListElement: true, HTMLDataElement: true, HTMLDataListElement: true, HTMLDetailsElement: true, HTMLDialogElement: true, HTMLEmbedElement: true, HTMLFieldSetElement: true, HTMLHRElement: true, HTMLHeadElement: true, HTMLHeadingElement: true, HTMLHtmlElement: true, HTMLIFrameElement: true, HTMLImageElement: true, HTMLLIElement: true, HTMLLabelElement: true, HTMLLegendElement: true, HTMLLinkElement: true, HTMLMapElement: true, HTMLMediaElement: true, HTMLMenuElement: true, HTMLMetaElement: true, HTMLMeterElement: true, HTMLModElement: true, HTMLOListElement: true, HTMLObjectElement: true, HTMLOptGroupElement: true, HTMLOptionElement: true, HTMLOutputElement: true, HTMLParagraphElement: true, HTMLParamElement: true, HTMLPictureElement: true, HTMLPreElement: true, HTMLProgressElement: true, HTMLQuoteElement: true, HTMLScriptElement: true, HTMLShadowElement: true, HTMLSlotElement: true, HTMLSourceElement: true, HTMLSpanElement: true, HTMLStyleElement: true, HTMLTableCaptionElement: true, HTMLTableCellElement: true, HTMLTableDataCellElement: true, HTMLTableHeaderCellElement: true, HTMLTableColElement: true, HTMLTextAreaElement: true, HTMLTimeElement: true, HTMLTitleElement: true, HTMLTrackElement: true, HTMLUListElement: true, HTMLUnknownElement: true, HTMLVideoElement: true, HTMLDirectoryElement: true, HTMLFontElement: true, HTMLFrameElement: true, HTMLFrameSetElement: true, HTMLMarqueeElement: true, HTMLElement: false, HTMLAnchorElement: true, HTMLAreaElement: true, HTMLBaseElement: true, HTMLBodyElement: true, HTMLButtonElement: true, CDATASection: true, CharacterData: true, Comment: true, ProcessingInstruction: true, Text: true, CSSStyleDeclaration: true, MSStyleCSSProperties: true, CSS2Properties: true, HTMLDivElement: true, XMLDocument: true, Document: false, DOMException: true, DOMImplementation: true, DOMTokenList: true, MathMLElement: true, Element: false, AbortPaymentEvent: true, AnimationEvent: true, AnimationPlaybackEvent: true, ApplicationCacheErrorEvent: true, BackgroundFetchClickEvent: true, BackgroundFetchEvent: true, BackgroundFetchFailEvent: true, BackgroundFetchedEvent: true, BeforeInstallPromptEvent: true, BeforeUnloadEvent: true, BlobEvent: true, CanMakePaymentEvent: true, ClipboardEvent: true, CloseEvent: true, CustomEvent: true, DeviceMotionEvent: true, DeviceOrientationEvent: true, ErrorEvent: true, ExtendableEvent: true, ExtendableMessageEvent: true, FetchEvent: true, FontFaceSetLoadEvent: true, ForeignFetchEvent: true, GamepadEvent: true, HashChangeEvent: true, InstallEvent: true, MediaEncryptedEvent: true, MediaKeyMessageEvent: true, MediaQueryListEvent: true, MediaStreamEvent: true, MediaStreamTrackEvent: true, MessageEvent: true, MIDIConnectionEvent: true, MIDIMessageEvent: true, MutationEvent: true, NotificationEvent: true, PageTransitionEvent: true, PaymentRequestEvent: true, PaymentRequestUpdateEvent: true, PopStateEvent: true, PresentationConnectionAvailableEvent: true, PresentationConnectionCloseEvent: true, PromiseRejectionEvent: true, PushEvent: true, RTCDataChannelEvent: true, RTCDTMFToneChangeEvent: true, RTCPeerConnectionIceEvent: true, RTCTrackEvent: true, SecurityPolicyViolationEvent: true, SensorErrorEvent: true, SpeechRecognitionError: true, SpeechRecognitionEvent: true, SpeechSynthesisEvent: true, StorageEvent: true, SyncEvent: true, TrackEvent: true, TransitionEvent: true, WebKitTransitionEvent: true, VRDeviceEvent: true, VRDisplayEvent: true, VRSessionEvent: true, MojoInterfaceRequestEvent: true, USBConnectionEvent: true, IDBVersionChangeEvent: true, AudioProcessingEvent: true, OfflineAudioCompletionEvent: true, WebGLContextEvent: true, Event: false, InputEvent: false, SubmitEvent: false, EventTarget: false, HTMLFormElement: true, HTMLDocument: true, XMLHttpRequest: true, XMLHttpRequestEventTarget: false, HTMLInputElement: true, KeyboardEvent: true, Location: true, MouseEvent: true, DragEvent: true, PointerEvent: true, WheelEvent: true, DocumentFragment: true, ShadowRoot: true, DocumentType: true, Node: false, NodeList: true, RadioNodeList: true, ProgressEvent: true, ResourceProgressEvent: true, HTMLSelectElement: true, Storage: true, HTMLTableElement: true, HTMLTableRowElement: true, HTMLTableSectionElement: true, HTMLTemplateElement: true, Touch: true, TouchEvent: true, TouchList: true, CompositionEvent: true, FocusEvent: true, TextEvent: true, UIEvent: false, Window: true, DOMWindow: true, Attr: true, NamedNodeMap: true, MozNamedAttrMap: true, SVGScriptElement: true, SVGAElement: true, SVGAnimateElement: true, SVGAnimateMotionElement: true, SVGAnimateTransformElement: true, SVGAnimationElement: true, SVGCircleElement: true, SVGClipPathElement: true, SVGDefsElement: true, SVGDescElement: true, SVGDiscardElement: true, SVGEllipseElement: true, SVGFEBlendElement: true, SVGFEColorMatrixElement: true, SVGFEComponentTransferElement: true, SVGFECompositeElement: true, SVGFEConvolveMatrixElement: true, SVGFEDiffuseLightingElement: true, SVGFEDisplacementMapElement: true, SVGFEDistantLightElement: true, SVGFEFloodElement: true, SVGFEFuncAElement: true, SVGFEFuncBElement: true, SVGFEFuncGElement: true, SVGFEFuncRElement: true, SVGFEGaussianBlurElement: true, SVGFEImageElement: true, SVGFEMergeElement: true, SVGFEMergeNodeElement: true, SVGFEMorphologyElement: true, SVGFEOffsetElement: true, SVGFEPointLightElement: true, SVGFESpecularLightingElement: true, SVGFESpotLightElement: true, SVGFETileElement: true, SVGFETurbulenceElement: true, SVGFilterElement: true, SVGForeignObjectElement: true, SVGGElement: true, SVGGeometryElement: true, SVGGraphicsElement: true, SVGImageElement: true, SVGLineElement: true, SVGLinearGradientElement: true, SVGMarkerElement: true, SVGMaskElement: true, SVGMetadataElement: true, SVGPathElement: true, SVGPatternElement: true, SVGPolygonElement: true, SVGPolylineElement: true, SVGRadialGradientElement: true, SVGRectElement: true, SVGSetElement: true, SVGStopElement: true, SVGStyleElement: true, SVGSVGElement: true, SVGSwitchElement: true, SVGSymbolElement: true, SVGTSpanElement: true, SVGTextContentElement: true, SVGTextElement: true, SVGTextPathElement: true, SVGTextPositioningElement: true, SVGTitleElement: true, SVGUseElement: true, SVGViewElement: true, SVGGradientElement: true, SVGComponentTransferFunctionElement: true, SVGFEDropShadowElement: true, SVGMPathElement: true, SVGElement: false});
+    hunkHelpers.setOrUpdateInterceptorsByTag({DOMError: J.JavaScriptObject, MediaError: J.JavaScriptObject, Navigator: J.JavaScriptObject, NavigatorConcurrentHardware: J.JavaScriptObject, NavigatorUserMediaError: J.JavaScriptObject, OverconstrainedError: J.JavaScriptObject, PositionError: J.JavaScriptObject, GeolocationPositionError: J.JavaScriptObject, Range: J.JavaScriptObject, HTMLAudioElement: A.HtmlElement, HTMLBRElement: A.HtmlElement, HTMLCanvasElement: A.HtmlElement, HTMLContentElement: A.HtmlElement, HTMLDListElement: A.HtmlElement, HTMLDataElement: A.HtmlElement, HTMLDataListElement: A.HtmlElement, HTMLDetailsElement: A.HtmlElement, HTMLDialogElement: A.HtmlElement, HTMLEmbedElement: A.HtmlElement, HTMLFieldSetElement: A.HtmlElement, HTMLHRElement: A.HtmlElement, HTMLHeadElement: A.HtmlElement, HTMLHeadingElement: A.HtmlElement, HTMLHtmlElement: A.HtmlElement, HTMLIFrameElement: A.HtmlElement, HTMLImageElement: A.HtmlElement, HTMLLabelElement: A.HtmlElement, HTMLLegendElement: A.HtmlElement, HTMLLinkElement: A.HtmlElement, HTMLMapElement: A.HtmlElement, HTMLMediaElement: A.HtmlElement, HTMLMenuElement: A.HtmlElement, HTMLMetaElement: A.HtmlElement, HTMLMeterElement: A.HtmlElement, HTMLModElement: A.HtmlElement, HTMLOListElement: A.HtmlElement, HTMLObjectElement: A.HtmlElement, HTMLOptGroupElement: A.HtmlElement, HTMLOptionElement: A.HtmlElement, HTMLOutputElement: A.HtmlElement, HTMLParagraphElement: A.HtmlElement, HTMLParamElement: A.HtmlElement, HTMLPictureElement: A.HtmlElement, HTMLPreElement: A.HtmlElement, HTMLProgressElement: A.HtmlElement, HTMLQuoteElement: A.HtmlElement, HTMLScriptElement: A.HtmlElement, HTMLShadowElement: A.HtmlElement, HTMLSlotElement: A.HtmlElement, HTMLSourceElement: A.HtmlElement, HTMLSpanElement: A.HtmlElement, HTMLStyleElement: A.HtmlElement, HTMLTableCaptionElement: A.HtmlElement, HTMLTableCellElement: A.HtmlElement, HTMLTableDataCellElement: A.HtmlElement, HTMLTableHeaderCellElement: A.HtmlElement, HTMLTableColElement: A.HtmlElement, HTMLTextAreaElement: A.HtmlElement, HTMLTimeElement: A.HtmlElement, HTMLTitleElement: A.HtmlElement, HTMLTrackElement: A.HtmlElement, HTMLUnknownElement: A.HtmlElement, HTMLVideoElement: A.HtmlElement, HTMLDirectoryElement: A.HtmlElement, HTMLFontElement: A.HtmlElement, HTMLFrameElement: A.HtmlElement, HTMLFrameSetElement: A.HtmlElement, HTMLMarqueeElement: A.HtmlElement, HTMLElement: A.HtmlElement, HTMLAnchorElement: A.AnchorElement, HTMLAreaElement: A.AreaElement, HTMLBaseElement: A.BaseElement, HTMLBodyElement: A.BodyElement, HTMLButtonElement: A.ButtonElement, CDATASection: A.CharacterData, CharacterData: A.CharacterData, Comment: A.CharacterData, ProcessingInstruction: A.CharacterData, Text: A.CharacterData, CSSStyleDeclaration: A.CssStyleDeclaration, MSStyleCSSProperties: A.CssStyleDeclaration, CSS2Properties: A.CssStyleDeclaration, HTMLDivElement: A.DivElement, XMLDocument: A.Document, Document: A.Document, DOMException: A.DomException, DOMImplementation: A.DomImplementation, DOMTokenList: A.DomTokenList, MathMLElement: A.Element, Element: A.Element, AbortPaymentEvent: A.Event, AnimationEvent: A.Event, AnimationPlaybackEvent: A.Event, ApplicationCacheErrorEvent: A.Event, BackgroundFetchClickEvent: A.Event, BackgroundFetchEvent: A.Event, BackgroundFetchFailEvent: A.Event, BackgroundFetchedEvent: A.Event, BeforeInstallPromptEvent: A.Event, BeforeUnloadEvent: A.Event, BlobEvent: A.Event, CanMakePaymentEvent: A.Event, ClipboardEvent: A.Event, CloseEvent: A.Event, CustomEvent: A.Event, DeviceMotionEvent: A.Event, DeviceOrientationEvent: A.Event, ErrorEvent: A.Event, ExtendableEvent: A.Event, ExtendableMessageEvent: A.Event, FetchEvent: A.Event, FontFaceSetLoadEvent: A.Event, ForeignFetchEvent: A.Event, GamepadEvent: A.Event, HashChangeEvent: A.Event, InstallEvent: A.Event, MediaEncryptedEvent: A.Event, MediaKeyMessageEvent: A.Event, MediaQueryListEvent: A.Event, MediaStreamEvent: A.Event, MediaStreamTrackEvent: A.Event, MessageEvent: A.Event, MIDIConnectionEvent: A.Event, MIDIMessageEvent: A.Event, MutationEvent: A.Event, NotificationEvent: A.Event, PageTransitionEvent: A.Event, PaymentRequestEvent: A.Event, PaymentRequestUpdateEvent: A.Event, PopStateEvent: A.Event, PresentationConnectionAvailableEvent: A.Event, PresentationConnectionCloseEvent: A.Event, PromiseRejectionEvent: A.Event, PushEvent: A.Event, RTCDataChannelEvent: A.Event, RTCDTMFToneChangeEvent: A.Event, RTCPeerConnectionIceEvent: A.Event, RTCTrackEvent: A.Event, SecurityPolicyViolationEvent: A.Event, SensorErrorEvent: A.Event, SpeechRecognitionError: A.Event, SpeechRecognitionEvent: A.Event, SpeechSynthesisEvent: A.Event, StorageEvent: A.Event, SyncEvent: A.Event, TrackEvent: A.Event, TransitionEvent: A.Event, WebKitTransitionEvent: A.Event, VRDeviceEvent: A.Event, VRDisplayEvent: A.Event, VRSessionEvent: A.Event, MojoInterfaceRequestEvent: A.Event, USBConnectionEvent: A.Event, IDBVersionChangeEvent: A.Event, AudioProcessingEvent: A.Event, OfflineAudioCompletionEvent: A.Event, WebGLContextEvent: A.Event, Event: A.Event, InputEvent: A.Event, SubmitEvent: A.Event, EventTarget: A.EventTarget, HTMLFormElement: A.FormElement, HTMLDocument: A.HtmlDocument, XMLHttpRequest: A.HttpRequest, XMLHttpRequestEventTarget: A.HttpRequestEventTarget, HTMLInputElement: A.InputElement, KeyboardEvent: A.KeyboardEvent, HTMLLIElement: A.LIElement, Location: A.Location, MouseEvent: A.MouseEvent, DragEvent: A.MouseEvent, PointerEvent: A.MouseEvent, WheelEvent: A.MouseEvent, DocumentFragment: A.Node, ShadowRoot: A.Node, DocumentType: A.Node, Node: A.Node, NodeList: A.NodeList, RadioNodeList: A.NodeList, ProgressEvent: A.ProgressEvent, ResourceProgressEvent: A.ProgressEvent, HTMLSelectElement: A.SelectElement, Storage: A.Storage, HTMLTableElement: A.TableElement, HTMLTableRowElement: A.TableRowElement, HTMLTableSectionElement: A.TableSectionElement, HTMLTemplateElement: A.TemplateElement, Touch: A.Touch, TouchEvent: A.TouchEvent, TouchList: A.TouchList, CompositionEvent: A.UIEvent, FocusEvent: A.UIEvent, TextEvent: A.UIEvent, UIEvent: A.UIEvent, HTMLUListElement: A.UListElement, Window: A.Window, DOMWindow: A.Window, Attr: A._Attr, NamedNodeMap: A._NamedNodeMap, MozNamedAttrMap: A._NamedNodeMap, SVGScriptElement: A.ScriptElement0, SVGAElement: A.SvgElement, SVGAnimateElement: A.SvgElement, SVGAnimateMotionElement: A.SvgElement, SVGAnimateTransformElement: A.SvgElement, SVGAnimationElement: A.SvgElement, SVGCircleElement: A.SvgElement, SVGClipPathElement: A.SvgElement, SVGDefsElement: A.SvgElement, SVGDescElement: A.SvgElement, SVGDiscardElement: A.SvgElement, SVGEllipseElement: A.SvgElement, SVGFEBlendElement: A.SvgElement, SVGFEColorMatrixElement: A.SvgElement, SVGFEComponentTransferElement: A.SvgElement, SVGFECompositeElement: A.SvgElement, SVGFEConvolveMatrixElement: A.SvgElement, SVGFEDiffuseLightingElement: A.SvgElement, SVGFEDisplacementMapElement: A.SvgElement, SVGFEDistantLightElement: A.SvgElement, SVGFEFloodElement: A.SvgElement, SVGFEFuncAElement: A.SvgElement, SVGFEFuncBElement: A.SvgElement, SVGFEFuncGElement: A.SvgElement, SVGFEFuncRElement: A.SvgElement, SVGFEGaussianBlurElement: A.SvgElement, SVGFEImageElement: A.SvgElement, SVGFEMergeElement: A.SvgElement, SVGFEMergeNodeElement: A.SvgElement, SVGFEMorphologyElement: A.SvgElement, SVGFEOffsetElement: A.SvgElement, SVGFEPointLightElement: A.SvgElement, SVGFESpecularLightingElement: A.SvgElement, SVGFESpotLightElement: A.SvgElement, SVGFETileElement: A.SvgElement, SVGFETurbulenceElement: A.SvgElement, SVGFilterElement: A.SvgElement, SVGForeignObjectElement: A.SvgElement, SVGGElement: A.SvgElement, SVGGeometryElement: A.SvgElement, SVGGraphicsElement: A.SvgElement, SVGImageElement: A.SvgElement, SVGLineElement: A.SvgElement, SVGLinearGradientElement: A.SvgElement, SVGMarkerElement: A.SvgElement, SVGMaskElement: A.SvgElement, SVGMetadataElement: A.SvgElement, SVGPathElement: A.SvgElement, SVGPatternElement: A.SvgElement, SVGPolygonElement: A.SvgElement, SVGPolylineElement: A.SvgElement, SVGRadialGradientElement: A.SvgElement, SVGRectElement: A.SvgElement, SVGSetElement: A.SvgElement, SVGStopElement: A.SvgElement, SVGStyleElement: A.SvgElement, SVGSVGElement: A.SvgElement, SVGSwitchElement: A.SvgElement, SVGSymbolElement: A.SvgElement, SVGTSpanElement: A.SvgElement, SVGTextContentElement: A.SvgElement, SVGTextElement: A.SvgElement, SVGTextPathElement: A.SvgElement, SVGTextPositioningElement: A.SvgElement, SVGTitleElement: A.SvgElement, SVGUseElement: A.SvgElement, SVGViewElement: A.SvgElement, SVGGradientElement: A.SvgElement, SVGComponentTransferFunctionElement: A.SvgElement, SVGFEDropShadowElement: A.SvgElement, SVGMPathElement: A.SvgElement, SVGElement: A.SvgElement});
+    hunkHelpers.setOrUpdateLeafTags({DOMError: true, MediaError: true, Navigator: true, NavigatorConcurrentHardware: true, NavigatorUserMediaError: true, OverconstrainedError: true, PositionError: true, GeolocationPositionError: true, Range: true, HTMLAudioElement: true, HTMLBRElement: true, HTMLCanvasElement: true, HTMLContentElement: true, HTMLDListElement: true, HTMLDataElement: true, HTMLDataListElement: true, HTMLDetailsElement: true, HTMLDialogElement: true, HTMLEmbedElement: true, HTMLFieldSetElement: true, HTMLHRElement: true, HTMLHeadElement: true, HTMLHeadingElement: true, HTMLHtmlElement: true, HTMLIFrameElement: true, HTMLImageElement: true, HTMLLabelElement: true, HTMLLegendElement: true, HTMLLinkElement: true, HTMLMapElement: true, HTMLMediaElement: true, HTMLMenuElement: true, HTMLMetaElement: true, HTMLMeterElement: true, HTMLModElement: true, HTMLOListElement: true, HTMLObjectElement: true, HTMLOptGroupElement: true, HTMLOptionElement: true, HTMLOutputElement: true, HTMLParagraphElement: true, HTMLParamElement: true, HTMLPictureElement: true, HTMLPreElement: true, HTMLProgressElement: true, HTMLQuoteElement: true, HTMLScriptElement: true, HTMLShadowElement: true, HTMLSlotElement: true, HTMLSourceElement: true, HTMLSpanElement: true, HTMLStyleElement: true, HTMLTableCaptionElement: true, HTMLTableCellElement: true, HTMLTableDataCellElement: true, HTMLTableHeaderCellElement: true, HTMLTableColElement: true, HTMLTextAreaElement: true, HTMLTimeElement: true, HTMLTitleElement: true, HTMLTrackElement: true, HTMLUnknownElement: true, HTMLVideoElement: true, HTMLDirectoryElement: true, HTMLFontElement: true, HTMLFrameElement: true, HTMLFrameSetElement: true, HTMLMarqueeElement: true, HTMLElement: false, HTMLAnchorElement: true, HTMLAreaElement: true, HTMLBaseElement: true, HTMLBodyElement: true, HTMLButtonElement: true, CDATASection: true, CharacterData: true, Comment: true, ProcessingInstruction: true, Text: true, CSSStyleDeclaration: true, MSStyleCSSProperties: true, CSS2Properties: true, HTMLDivElement: true, XMLDocument: true, Document: false, DOMException: true, DOMImplementation: true, DOMTokenList: true, MathMLElement: true, Element: false, AbortPaymentEvent: true, AnimationEvent: true, AnimationPlaybackEvent: true, ApplicationCacheErrorEvent: true, BackgroundFetchClickEvent: true, BackgroundFetchEvent: true, BackgroundFetchFailEvent: true, BackgroundFetchedEvent: true, BeforeInstallPromptEvent: true, BeforeUnloadEvent: true, BlobEvent: true, CanMakePaymentEvent: true, ClipboardEvent: true, CloseEvent: true, CustomEvent: true, DeviceMotionEvent: true, DeviceOrientationEvent: true, ErrorEvent: true, ExtendableEvent: true, ExtendableMessageEvent: true, FetchEvent: true, FontFaceSetLoadEvent: true, ForeignFetchEvent: true, GamepadEvent: true, HashChangeEvent: true, InstallEvent: true, MediaEncryptedEvent: true, MediaKeyMessageEvent: true, MediaQueryListEvent: true, MediaStreamEvent: true, MediaStreamTrackEvent: true, MessageEvent: true, MIDIConnectionEvent: true, MIDIMessageEvent: true, MutationEvent: true, NotificationEvent: true, PageTransitionEvent: true, PaymentRequestEvent: true, PaymentRequestUpdateEvent: true, PopStateEvent: true, PresentationConnectionAvailableEvent: true, PresentationConnectionCloseEvent: true, PromiseRejectionEvent: true, PushEvent: true, RTCDataChannelEvent: true, RTCDTMFToneChangeEvent: true, RTCPeerConnectionIceEvent: true, RTCTrackEvent: true, SecurityPolicyViolationEvent: true, SensorErrorEvent: true, SpeechRecognitionError: true, SpeechRecognitionEvent: true, SpeechSynthesisEvent: true, StorageEvent: true, SyncEvent: true, TrackEvent: true, TransitionEvent: true, WebKitTransitionEvent: true, VRDeviceEvent: true, VRDisplayEvent: true, VRSessionEvent: true, MojoInterfaceRequestEvent: true, USBConnectionEvent: true, IDBVersionChangeEvent: true, AudioProcessingEvent: true, OfflineAudioCompletionEvent: true, WebGLContextEvent: true, Event: false, InputEvent: false, SubmitEvent: false, EventTarget: false, HTMLFormElement: true, HTMLDocument: true, XMLHttpRequest: true, XMLHttpRequestEventTarget: false, HTMLInputElement: true, KeyboardEvent: true, HTMLLIElement: true, Location: true, MouseEvent: true, DragEvent: true, PointerEvent: true, WheelEvent: true, DocumentFragment: true, ShadowRoot: true, DocumentType: true, Node: false, NodeList: true, RadioNodeList: true, ProgressEvent: true, ResourceProgressEvent: true, HTMLSelectElement: true, Storage: true, HTMLTableElement: true, HTMLTableRowElement: true, HTMLTableSectionElement: true, HTMLTemplateElement: true, Touch: true, TouchEvent: true, TouchList: true, CompositionEvent: true, FocusEvent: true, TextEvent: true, UIEvent: false, HTMLUListElement: true, Window: true, DOMWindow: true, Attr: true, NamedNodeMap: true, MozNamedAttrMap: true, SVGScriptElement: true, SVGAElement: true, SVGAnimateElement: true, SVGAnimateMotionElement: true, SVGAnimateTransformElement: true, SVGAnimationElement: true, SVGCircleElement: true, SVGClipPathElement: true, SVGDefsElement: true, SVGDescElement: true, SVGDiscardElement: true, SVGEllipseElement: true, SVGFEBlendElement: true, SVGFEColorMatrixElement: true, SVGFEComponentTransferElement: true, SVGFECompositeElement: true, SVGFEConvolveMatrixElement: true, SVGFEDiffuseLightingElement: true, SVGFEDisplacementMapElement: true, SVGFEDistantLightElement: true, SVGFEFloodElement: true, SVGFEFuncAElement: true, SVGFEFuncBElement: true, SVGFEFuncGElement: true, SVGFEFuncRElement: true, SVGFEGaussianBlurElement: true, SVGFEImageElement: true, SVGFEMergeElement: true, SVGFEMergeNodeElement: true, SVGFEMorphologyElement: true, SVGFEOffsetElement: true, SVGFEPointLightElement: true, SVGFESpecularLightingElement: true, SVGFESpotLightElement: true, SVGFETileElement: true, SVGFETurbulenceElement: true, SVGFilterElement: true, SVGForeignObjectElement: true, SVGGElement: true, SVGGeometryElement: true, SVGGraphicsElement: true, SVGImageElement: true, SVGLineElement: true, SVGLinearGradientElement: true, SVGMarkerElement: true, SVGMaskElement: true, SVGMetadataElement: true, SVGPathElement: true, SVGPatternElement: true, SVGPolygonElement: true, SVGPolylineElement: true, SVGRadialGradientElement: true, SVGRectElement: true, SVGSetElement: true, SVGStopElement: true, SVGStyleElement: true, SVGSVGElement: true, SVGSwitchElement: true, SVGSymbolElement: true, SVGTSpanElement: true, SVGTextContentElement: true, SVGTextElement: true, SVGTextPathElement: true, SVGTextPositioningElement: true, SVGTitleElement: true, SVGUseElement: true, SVGViewElement: true, SVGGradientElement: true, SVGComponentTransferFunctionElement: true, SVGFEDropShadowElement: true, SVGMPathElement: true, SVGElement: false});
   })();
   Function.prototype.call$1 = function(a) {
     return this(a);

@@ -1,8 +1,12 @@
 # 🖥️ Virtual-TI: Your Web-Based TI Graphing Calculator Emulator 🚀
 
+![screenshot 1](https://github.com/the-real-kodoninja/Virtual-TI/captureit_3-19-2025_at_18-14-10.png)
+
+![screenshot 2](https://github.com/the-real-kodoninja/Virtual-TI/captureit_3-19-2025_at_18-18-02.png)
+
 ## 🌟 Overview
 
-**Virtual-TI** brings the power of a TI graphing calculator to your web browser! 🌐 Perform basic arithmetic, plot complex mathematical functions, and experience a user-friendly interface that mimics the classic TI calculator. Whether you're a student, educator, or math enthusiast, Virtual-TI is your go-to tool for on-the-fly calculations and visualizations.
+**Virtual-TI** brings the power of a TI graphing calculator to your web browser! 🌐 Perform basic arithmetic, plot complex mathematical functions, and experience a user-friendly interface that mimics the classic TI calculator. Whether you're a student, educator, or math enthusiast, Virtual-TI is your go-to tool for on-the-fly calculations and visualizations. (built with the help of AI)
 
 ## ✨ Features
 

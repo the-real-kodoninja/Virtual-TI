@@ -22,12 +22,16 @@
             <li>Drag the calculator to move it, and click the close button to minimize it.</li>
         </ul>
         <p>Built with passion by Emmanuel Barry Moore.</p>
+        <h3>📝 Expression Explanation</h3>
+        <div id="explanation" class="explanation">
+            <p>Enter an expression in the calculator to see its explanation here.</p>
+        </div>
     </div>
 
     <!-- Sticky Calculator Widget -->
     <div class="calculator-widget" id="calculator-widget">
         <div class="calculator-minimized" id="calculator-minimized">
-            <button class="toggle-button" onclick="toggleCalculator()">🖩</button>
+            <button class="toggle-button">🖩</button>
         </div>
         <div class="calculator" id="calculator">
             <div class="screen">
@@ -35,69 +39,69 @@
                 <div id="result"></div>
                 <div id="plot"></div>
             </div>
-            <button class="close-button" onclick="toggleCalculator()">✖</button>
+            <button class="close-button">✖</button>
             <div class="keypad">
                 <!-- Navigation Pad -->
                 <div class="navigation-pad">
                     <button type="button" class="nav-button empty"></button>
-                    <button type="button" class="nav-button" onclick="navigate('up')">▲</button>
+                    <button type="button" class="nav-button" id="nav-up">▲</button>
                     <button type="button" class="nav-button empty"></button>
-                    <button type="button" class="nav-button" onclick="navigate('left')">◄</button>
-                    <button type="button" class="nav-button" onclick="navigate('enter')">Enter</button>
-                    <button type="button" class="nav-button" onclick="navigate('right')">►</button>
+                    <button type="button" class="nav-button" id="nav-left">◄</button>
+                    <button type="button" class="nav-button" id="nav-enter">Enter</button>
+                    <button type="button" class="nav-button" id="nav-right">►</button>
                     <button type="button" class="nav-button empty"></button>
-                    <button type="button" class="nav-button" onclick="navigate('down')">▼</button>
+                    <button type="button" class="nav-button" id="nav-down">▼</button>
                     <button type="button" class="nav-button empty"></button>
                 </div>
                 <!-- Function Keys -->
                 <div class="function-keys">
-                    <button type="button" onclick="performFunction('doc')">Doc</button>
-                    <button type="button" onclick="performFunction('menu')">Menu</button>
-                    <button type="button" onclick="performFunction('on')">On</button>
-                    <button type="button" onclick="performFunction('esc')">Esc</button>
+                    <button type="button" id="func-doc">Doc</button>
+                    <button type="button" id="func-menu">Menu</button>
+                    <button type="button" id="func-on">On</button>
+                    <button type="button" id="func-esc">Esc</button>
                 </div>
                 <!-- Alphanumeric Keys -->
                 <div class="alphanumeric-keypad">
-                    <button type="button" onclick="appendToDisplay('A')">A</button>
-                    <button type="button" onclick="appendToDisplay('B')">B</button>
-                    <button type="button" onclick="appendToDisplay('C')">C</button>
-                    <button type="button" onclick="showVars()">Vars</button>
+                    <button type="button" id="key-a">A</button>
+                    <button type="button" id="key-b">B</button>
+                    <button type="button" id="key-c">C</button>
+                    <button type="button" id="show-vars">Vars</button>
                 </div>
                 <!-- Numeric Keypad -->
                 <div class="numeric-keypad">
-                    <button type="button" onclick="appendToDisplay('7')">7</button>
-                    <button type="button" onclick="appendToDisplay('8')">8</button>
-                    <button type="button" onclick="appendToDisplay('9')">9</button>
-                    <button type="button" onclick="appendToDisplay('+')">+</button>
-                    <button type="button" onclick="appendToDisplay('4')">4</button>
-                    <button type="button" onclick="appendToDisplay('5')">5</button>
-                    <button type="button" onclick="appendToDisplay('6')">6</button>
-                    <button type="button" onclick="appendToDisplay('×')">×</button>
-                    <button type="button" onclick="appendToDisplay('1')">1</button>
-                    <button type="button" onclick="appendToDisplay('2')">2</button>
-                    <button type="button" onclick="appendToDisplay('3')">3</button>
-                    <button type="button" onclick="appendToDisplay('-')">−</button>
-                    <button type="button" onclick="appendToDisplay('0')">0</button>
-                    <button type="button" onclick="appendToDisplay('.')">.</button>
-                    <button type="button" id="clear" onclick="clearDisplay()">C</button>
-                    <button type="button" onclick="appendToDisplay('+')">+</button>
+                    <button type="button" id="key-7">7</button>
+                    <button type="button" id="key-8">8</button>
+                    <button type="button" id="key-9">9</button>
+                    <button type="button" id="key-plus">+</button>
+                    <button type="button" id="key-4">4</button>
+                    <button type="button" id="key-5">5</button>
+                    <button type="button" id="key-6">6</button>
+                    <button type="button" id="key-multiply">×</button>
+                    <button type="button" id="key-1">1</button>
+                    <button type="button" id="key-2">2</button>
+                    <button type="button" id="key-3">3</button>
+                    <button type="button" id="key-minus">−</button>
+                    <button type="button" id="key-0">0</button>
+                    <button type="button" id="key-dot">.</button>
+                    <button type="button" id="clear">C</button>
+                    <button type="button" id="key-plus2">+</button>
                 </div>
                 <!-- Math Function Keys -->
                 <div class="math-function-keys">
-                    <button type="button" onclick="appendToDisplay('sin(')">sin</button>
-                    <button type="button" onclick="appendToDisplay('cos(')">cos</button>
-                    <button type="button" onclick="appendToDisplay('tan(')">tan</button>
-                    <button type="button" onclick="showHistory()">Hist</button>
+                    <button type="button" id="func-sin">sin</button>
+                    <button type="button" id="func-cos">cos</button>
+                    <button type="button" id="func-tan">tan</button>
+                    <button type="button" id="show-history">Hist</button>
                 </div>
                 <!-- Plot Button -->
                 <div class="plot-button">
-                    <button type="button" onclick="showPlotModal()">Plot</button>
+                    <button type="button" id="show-plot-modal">Plot</button>
                 </div>
             </div>
-            <form id="calc-form" method="POST" action="/calculate" onsubmit="return calculate();">
+            <form id="calc-form" method="POST" action="/calculate">
                 <input type="text" name="expression" id="calc-expression" style="display:none;">
             </form>
-            <form id="plot-form" method="POST" action="/plot" onsubmit="return plot();">
+            <form id="plot-form" method="POST" action="/plot">
                 <input type="text" name="expression" id="plot-expression" style="display:none;">
             </form>
         </div>
@@ -128,8 +132,8 @@
                 <option value=":">Dotted</option>
                 <option value="-.">Dash-Dot</option>
             </select>
-            <button onclick="submitPlot()">Plot</button>
-            <button onclick="closePlotModal()">Cancel</button>
+            <button id="submit-plot">Plot</button>
+            <button id="close-plot-modal">Cancel</button>
         </div>
     </div>
 
@@ -138,7 +142,7 @@
         <div class="modal-content">
             <h2>Calculation History</h2>
             <ul id="history-list"></ul>
-            <button onclick="closeHistoryModal()">Close</button>
+            <button id="close-history-modal">Close</button>
         </div>
     </div>
 
@@ -147,7 +151,7 @@
         <div class="modal-content">
             <h2>Stored Variables</h2>
             <ul id="vars-list"></ul>
-            <button onclick="closeVarsModal()">Close</button>
+            <button id="close-vars-modal">Close</button>
         </div>
     </div>
 
