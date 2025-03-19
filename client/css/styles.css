@@ -1,0 +1,72 @@
+/* Reset some default styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e0e0e0; /* Light gray background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.calculator {
+    background-color: #4d4d4d; /* Dark gray for the calculator body */
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    width: 320px; /* Fixed width for calculator */
+}
+
+.display {
+    background-color: #ffcccb; /* Pastel earth-tone red for the display */
+    color: #000; /* Black text for the display */
+    font-size: 32px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: right;
+    margin-bottom: 10px;
+    height: 50px; /* Fixed height for display */
+    overflow: hidden; /* Hide overflow text */
+    border: 2px solid #ff0000; /* Darker red border for the display */
+}
+
+button {
+    background-color: #7f7f7f; /* Gray buttons */
+    color: #fff;
+    border: 1px solid #4d4d4d; /* Darker border */
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 18px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 70px; /* Fixed width for buttons */
+}
+
+button:hover {
+    background-color: #5a5a5a; /* Darker gray on hover */
+}
+
+button:active {
+    background-color: #4d4d4d; /* Even darker gray when pressed */
+}
+
+#result, #plot {
+    margin-top: 20px;
+    padding: 10px;
+    background: #e9ecef;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 18px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+}

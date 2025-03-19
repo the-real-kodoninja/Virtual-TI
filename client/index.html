@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Virtual-TI: TI Calculator Emulator</title>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display" contenteditable="true" oninput="updateDisplay()"></div>
+        <form id="calc-form" method="POST" action="/calculate" onsubmit="return calculate();">
+            <input type="text" name="expression" placeholder="Enter expression" required style="display:none;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                <button type="button" onclick="appendToDisplay('1')">1</button>
+                <button type="button" onclick="appendToDisplay('2')">2</button>
+                <button type="button" onclick="appendToDisplay('3')">3</button>
+                <button type="button" onclick="appendToDisplay('+')">+</button>
+                <button type="button" onclick="appendToDisplay('4')">4</button>
+                <button type="button" onclick="appendToDisplay('5')">5</button>
+                <button type="button" onclick="appendToDisplay('6')">6</button>
+                <button type="button" onclick="appendToDisplay('-')">-</button>
+                <button type="button" onclick="appendToDisplay('7')">7</button>
+                <button type="button" onclick="appendToDisplay('8')">8</button>
+                <button type="button" onclick="appendToDisplay('9')">9</button>
+                <button type="button" onclick="appendToDisplay('*')">*</button>
+                <button type="button" onclick="appendToDisplay('0')">0</button>
+                <button type="button" onclick="appendToDisplay('/')">/</button>
+                <button type="button" onclick="appendToDisplay('(')">(</button>
+                <button type="button" onclick="appendToDisplay(')')">)</button>
+                <button type="submit">Calculate</button>
+                <button type="button" onclick="clearDisplay()">C</button>
+            </div>
+        </form>
+        <form id="plot-form" method="POST" action="/plot" onsubmit="return plot();">
+            <input type="text" name="expression" placeholder="Enter expression for plot" required style="display:none;">
+            <button type="submit">Plot</button>
+        </form>
+        <div id="result"></div>
+        <div id="plot"></div>
+    </div>
+
+    <script defer src="js/main.dart.js"></script>
+</body>
+</html>
